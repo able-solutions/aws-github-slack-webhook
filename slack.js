@@ -50,7 +50,8 @@ var postMessage = async function(slackMessage, callback) {
 
 exports.handler = async (event, context) => {
   
-  //const payload = JSON.stringify(event);
+  const payload = JSON.stringify(event);
+  console.log(payload);
   
   if (event.hasOwnProperty('commits')) {
     eventType = "New Commit Detected";
