@@ -148,4 +148,47 @@ exports.handler = async (event, context) => {
     }
   }
   
+  if (event.hasOwnProperty('comment')) {
+    eventType = "New Comment Detected";
+    let timestamp = moment(event.comment.created_at).format('llll');
+    const commentLink = event.comment.html_url;
+    const comment = event.comment.body;
+    const repository = event.repository.name;
+    const issue = event.issue.title;
+    let color = "#FF8C00";
+    
+    //Comment Slack Message
+    var slackCommentMessage = {
+      channel: slackChannel,
+      username: slackUsername,
+      icon_emoji: emoji,
+      attachments: [
+        {
+          "color": color,
+          "author_name": eventType
+        },
+        {
+          "color": color,
+          "fields": [
+            { "title": `Date & Time Comment Made`, "value": `${timestamp}`, "short": false },
+            { "title": `Repository`, "value": `${repository}`, "short": true },
+            { "title": `Issue`, "value": `${issue}`, "short": true },
+            { "title": `Comment`, "value": `${comment}`, "short": false },
+            { "title": `Comment Link`, "value": `${commentLink}`, "short": false }
+          ]
+        }
+      ]
+    };
+
+    try {
+
+      await postMessage(slackCommentMessage);
+
+    } catch(e) {
+
+      console.error(e);
+
+    }
+  }
+  
 };
