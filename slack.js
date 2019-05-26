@@ -53,6 +53,11 @@ exports.handler = async (event, context) => {
   const payload = JSON.stringify(event);
   console.log(payload);
   
+  const headers = event.headers;
+  const githubEvent = headers['X-GitHub-Event'];
+  
+  console.log(headers, githubEvent);
+  
   if (event.hasOwnProperty('commits')) {
     eventType = "New Commit Detected";
     let branch = (event.ref).split('/')[2];
@@ -194,7 +199,7 @@ exports.handler = async (event, context) => {
   }
   
   if (event.ref_type === 'branch') {
-    eventType = "New Branch Created";
+    eventType = "Branch Changes Detected";
     let branch = event.ref;
     let timestamp = moment(event.repository.created_at).format('llll');
     const repository = event.repository.name;
@@ -214,9 +219,9 @@ exports.handler = async (event, context) => {
         {
           "color": color,
           "fields": [
-            { "title": "Date & Time Created", "value": `${timestamp}`, "short": false },
+            { "title": "Date & Time of Event", "value": `${timestamp}`, "short": false },
             { "title": `Repository`, "value": `${repository}`, "short": true },
-            { "title": `New Branch Name`, "value": `${branch}`, "short": true },
+            { "title": `Branch Name`, "value": `${branch}`, "short": true },
             { "title": `Link`, "value": `${createLink}`, "short": false }
           ]
         }
