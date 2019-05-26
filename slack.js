@@ -172,9 +172,9 @@ exports.handler = async (event, context) => {
         {
           "color": color,
           "fields": [
-            { "title": `Date & Time Comment Made`, "value": `${timestamp}`, "short": false },
+            { "title": `Date & Time Comment Made`, "value": `${timestamp}`, "short": true },
             { "title": `Repository`, "value": `${repository}`, "short": true },
-            { "title": `Issue`, "value": `${issue}`, "short": true },
+            { "title": `Issue`, "value": `${issue}`, "short": false },
             { "title": `Comment`, "value": `${comment}`, "short": false },
             { "title": `Comment Link`, "value": `${commentLink}`, "short": false }
           ]
