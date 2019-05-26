@@ -3,7 +3,8 @@ const moment = require('moment');
 
 exports.handler = function(event, context) {
   
-  console.log(event);
-  console.log(JSON.stringify(event));
+  const payload = JSON.stringify(event);
+  
+  console.log(payload);
   
 };
