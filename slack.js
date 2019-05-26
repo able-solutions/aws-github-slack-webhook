@@ -59,6 +59,7 @@ exports.handler = async (event, context) => {
     const commits = event.commits[0];
     const commitMessage = commits.message;
     const committer = commits.committer.name;
+    const repository = event.repository.name;
     const added = commits.added;
     const removed = commits.removed;
     const modified = commits.modified;
@@ -78,9 +79,10 @@ exports.handler = async (event, context) => {
         {
           "color": color,
           "fields": [
-            { "title": `Date & Time of Commit`, "value": `${timestamp}`, "short": false },
-            { "title": `Branch`, "value": `${branch}`, "short": true },
+            { "title": `Date & Time of Commit`, "value": `${timestamp}`, "short": true },
             { "title": `Committed By`, "value": `${committer}`, "short": true },
+            { "title": `Repository`, "value": `${repository}`, "short": true },
+            { "title": `Branch`, "value": `${branch}`, "short": true },
             { "title": `Commit Message`, "value": `${commitMessage}`, "short": false },
             { "title": `Added`, "value": `${added}`, "short": false },
             { "title": `Removed`, "value": `${removed}`, "short": false },
