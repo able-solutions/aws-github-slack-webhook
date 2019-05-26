@@ -17,7 +17,7 @@
       "Default": "codePipelineArtifactName",
       "Description": "Enter the name of the CodePipeline Artifact .zip file in the CodePipeline S3 Bucket."
     },
-    "UnencryptedHookURL": {
+    "SlackHook": {
       "Type": "AWS::SSM::Parameter::Value<String>",
       "Default": "UnencryptedHookURL",
       "Description": "Enter the unencrypted slack webhook url ifyou are not using encryption."
