@@ -193,4 +193,45 @@ exports.handler = async (event, context) => {
     }
   }
   
+  if (event.ref_type === 'branch') {
+    eventType = "New Branch Created";
+    let branch = (event.ref).split('/')[2];
+    let timestamp = moment(event.repository.created_at).format('llll');
+    const repository = event.repository.name;
+    const createLink = event.repository.git_refs_url;
+    let color = "#FF8C00";
+    
+    //Create Slack Message
+    var slackCreateMessage = {
+      channel: slackChannel,
+      username: slackUsername,
+      icon_emoji: emoji,
+      attachments: [
+        {
+          "color": color,
+          "author_name": eventType
+        },
+        {
+          "color": color,
+          "fields": [
+            { "title": `Date & Time Created`, "value": `${timestamp}`, "short": false },
+            { "title": `Repository`, "value": `${repository}`, "short": true },
+            { "title": `New Branch Name`, "value": `${branch}`, "short": true },
+            { "title": `Link`, "value": `${createLink}`, "short": false }
+          ]
+        }
+      ]
+    };
+
+    try {
+
+      await postMessage(slackCreateMessage);
+
+    } catch(e) {
+
+      console.error(e);
+
+    }
+  }
+  
 };
