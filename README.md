@@ -1,6 +1,10 @@
-# aws-apigateway-slackpost
+# AWS Github --> Slack Posting via API Gateway Information
 
 AWS CloudFormation template and Lambda Function that is designed to accept post requests to an API Gateway endpoint  that which then forward said request to a Lambda function which will post message data to a designated Slack channel
+
+- Author: Able
+
+- Date Created: June 2016
 
 ## What will this repository achieve? 
 
@@ -67,19 +71,23 @@ x
 
 This updates section will keep you informed of the progress made on this project:
 
-* 12/06
+* 12/06/2018
 
 The nodejs code for the lambda is complete. This Lambda can receive Push, Member and Ping events from github via API Gateway endpoints and reformat them into slack posts. Test payload files for each Push, Member and Ping event have been created also. The config file that the Lambda pulls in, using environmental variables to help customise the slack posts is also complete. 
 
 Whats Next? - Work has been started on the CloudFormation template that will create the Lambda function, API Gateway, IAM roles,Lambda permissions. However, since scripting the CF template, work has turned towards creating a CodePipeline first. The plan is to code a full codepipeline that sources the Github repo, zips up all lambda files and then deploys the CF  templates that create all the AWS resources, making this a complete "Out of the Box" solution
 
-* 20/06 @ 7:50pm
+* 20/06/2018 @ 7:50pm
 
 Successfully deployed the codepipeline.template into CloudFormation manually. This template creates all the SSM parameters that the Slack Lambda will use as its environmental variables. The Codepipeline will create two stages. The first stage will source checkout all the code from the Github repository. The second stage will hopefully deploy the cloudformation.template. Now that CodePipeline is deployed.... We need to test and make sure the cloudfomration.template builds successfully.
 
-* 20/06 @ 8:00pm
+* 20/06/2018 @ 8:00pm
 
 The codepipeline works!!! Now on any new push and code change within the repository, the codepipeline detects this and triggers the two stages scripted. The cloudformation.template codepipeline tried to deploy failed as the Lambda function could not reference the correct artifact file that contains the slack.js script.
+
+* 26/05/2018 @ 13:00 hrs
+
+Decided to branch from master and look to rewrite this solution to fall inline with improvements and updates to methods used previously. Looking to condense and simplify the lambda code as well. 
 
 #### Prerequisites
 
