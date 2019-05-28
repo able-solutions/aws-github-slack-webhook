@@ -48,20 +48,34 @@ var postMessage = async function(slackMessage, callback) {
   });  
 };
 
-exports.handler = async (event, context) => {
+exports.handler = async (event, context, callback) => {
+
+  const response = {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: 'Lambda has successfully executed',
+      input: event,
+    }),
+  };
   
-  const payload = JSON.stringify(event);
-  console.log(payload);
+  const errorResponse = {
+    statusCode: 400,
+    body: JSON.stringify({
+      message: 'Bad request Dude',
+    }),
+  };
   
-  const headers = event.headers;
-  const githubEvent = headers['X-GitHub-Event'];
+  //console.log(JSON.stringify(event));
+  const githubEvent = event.headers['X-GitHub-Event'];
+  const rawBody = JSON.parse(event.body);
+  const body = JSON.stringify(rawBody);
+  console.log(githubEvent);
+  console.log(body);
   
-  console.log(headers, githubEvent);
-  
-  if (event.hasOwnProperty('commits')) {
+  if (rawBody.hasOwnProperty('commits')) {
     eventType = "New Commit Detected";
-    let branch = (event.ref).split('/')[2];
-    const commits = event.commits[0];
+    let branch = (rawBody.ref).split('/')[2];
+    const commits = rawBody.commits[0];
     const commitMessage = commits.message;
     const committer = commits.committer.name;
     const repository = event.repository.name;
@@ -105,21 +119,24 @@ exports.handler = async (event, context) => {
     try {
 
       await postMessage(slackCommitMessage);
+      
+      callback(null, response);
 
     } catch(e) {
 
       console.error(e);
+      
+      callback(null, errorResponse);
 
     }
     
-  }
-  
-  if (event.hasOwnProperty('hook')) {
-    eventType = "New Web Hook Created";
-    const zen = event.zen;
-    let timestamp = moment(event.hook.created_at).format('llll');
-    const repository = event.repository.name;
-    const repoLink = event.repository.html_url;
+  } else if (githubEvent === 'ping' && rawBody.hook.active === true) {
+    let action = "Created";
+    eventType = `Web Hook ${action}`;
+    const zen = rawBody.zen;
+    let timestamp = moment(rawBody.hook.updated_at).format('llll');
+    const repository = rawBody.repository.name;
+    const repoLink = rawBody.repository.html_url;
     let color = "#F7EF00";
     
     //Hook Slack Message
@@ -143,25 +160,29 @@ exports.handler = async (event, context) => {
         }
       ]
     };
+    
+    console.log(slackHookMessage);
 
     try {
 
       await postMessage(slackHookMessage);
+      
+      callback(null, response);
 
     } catch(e) {
 
       console.error(e);
+      
+      callback(null, errorResponse);
 
     }
-  }
-  
-  if (event.hasOwnProperty('comment')) {
+  } else if (rawBody.hasOwnProperty('comment')) {
     eventType = "New Comment Detected";
-    let timestamp = moment(event.comment.created_at).format('llll');
-    const commentLink = event.comment.html_url;
-    const comment = event.comment.body;
-    const repository = event.repository.name;
-    const issue = event.issue.title;
+    let timestamp = moment(rawBody.comment.created_at).format('llll');
+    const commentLink = rawBody.comment.html_url;
+    const comment = rawBody.comment.body;
+    const repository = rawBody.repository.name;
+    const issue = rawBody.issue.title;
     let color = "#FF8C00";
     
     //Comment Slack Message
@@ -190,20 +211,22 @@ exports.handler = async (event, context) => {
     try {
 
       await postMessage(slackCommentMessage);
+      
+      callback(null, response);
 
     } catch(e) {
 
       console.error(e);
+      
+      callback(null, errorResponse);
 
     }
-  }
-  
-  if (event.ref_type === 'branch') {
+  } else if (rawBody.ref_type === 'branch') {
     eventType = "Branch Changes Detected";
-    let branch = event.ref;
-    let timestamp = moment(event.repository.created_at).format('llll');
-    const repository = event.repository.name;
-    const createLink = `${event.repository.html_url}/tree/${branch}`;
+    let branch = rawBody.ref;
+    let timestamp = moment(rawBody.repository.created_at).format('llll');
+    const repository = rawBody.repository.name;
+    const createLink = `${rawBody.repository.html_url}/tree/${branch}`;
     let color = "#FF8C00";
     
     //Create Slack Message
@@ -231,12 +254,20 @@ exports.handler = async (event, context) => {
     try {
 
       await postMessage(slackCreateMessage);
+      
+      callback(null, response);
 
     } catch(e) {
 
       console.error(e);
 
     }
+  } else {
+    
+    console.log('No events detected...');
+    
+    callback(null, response);
+    
   }
   
 };
