@@ -72,7 +72,7 @@ exports.handler = async (event, context, callback) => {
   console.log(githubEvent);
   console.log(body);
   
-  if (rawBody.hasOwnProperty('commits')) {
+  if (githubEvent === 'push') {
     eventType = "New Commit Detected";
     let branch = (rawBody.ref).split('/')[2];
     const commits = rawBody.commits[0];
