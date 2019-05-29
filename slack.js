@@ -176,17 +176,60 @@ exports.handler = async (event, context, callback) => {
       callback(null, errorResponse);
 
     }
-  } else if (rawBody.hasOwnProperty('comment')) {
-    eventType = "New Comment Detected";
+  } else if (githubEvent === 'commit_comment') {
+    eventType = "New Commit Comment Detected";
     let timestamp = moment(rawBody.comment.created_at).format('llll');
     const commentLink = rawBody.comment.html_url;
     const comment = rawBody.comment.body;
     const repository = rawBody.repository.name;
-    const issue = rawBody.issue.title;
-    let color = "#FF8C00";
+    let color = "#3CB371";
     
     //Comment Slack Message
-    var slackCommentMessage = {
+    var slackCommitCommentMessage = {
+      channel: slackChannel,
+      username: slackUsername,
+      icon_emoji: emoji,
+      attachments: [
+        {
+          "color": color,
+          "author_name": eventType
+        },
+        {
+          "color": color,
+          "fields": [
+            { "title": `Date & Time Comment Made`, "value": `${timestamp}`, "short": true },
+            { "title": `Repository`, "value": `${repository}`, "short": true },
+            { "title": `Comment`, "value": `${comment}`, "short": false },
+            { "title": `Comment Link`, "value": `${commentLink}`, "short": false }
+          ]
+        }
+      ]
+    };
+
+    try {
+
+      await postMessage(slackCommitCommentMessage);
+      
+      callback(null, response);
+
+    } catch(e) {
+
+      console.error(e);
+      
+      callback(null, errorResponse);
+
+    }
+  } else if (githubEvent === 'issue_comment') {
+    eventType = "New Issue Comment Detected";
+    let timestamp = moment(rawBody.comment.created_at).format('llll');
+    const commentLink = rawBody.issue.comments_url;
+    const comment = rawBody.comment.body;
+    const issue = rawBody.issue.title;
+    const repository = rawBody.repository.name;
+    let color = "#4B0082";
+    
+    //Comment Slack Message
+    var slackIssueCommentMessage = {
       channel: slackChannel,
       username: slackUsername,
       icon_emoji: emoji,
@@ -210,7 +253,7 @@ exports.handler = async (event, context, callback) => {
 
     try {
 
-      await postMessage(slackCommentMessage);
+      await postMessage(slackIssueCommentMessage);
       
       callback(null, response);
 
@@ -221,13 +264,14 @@ exports.handler = async (event, context, callback) => {
       callback(null, errorResponse);
 
     }
-  } else if (rawBody.ref_type === 'branch') {
-    eventType = "Branch Changes Detected";
-    let branch = rawBody.ref;
+  } else if (githubEvent === 'create') {
+    const objectCreated = rawBody.ref_type;
+    eventType = `Created ${objectCreated}`;
+    let object = rawBody.ref;
     let timestamp = moment(rawBody.repository.created_at).format('llll');
     const repository = rawBody.repository.name;
-    const createLink = `${rawBody.repository.html_url}/tree/${branch}`;
-    let color = "#FF8C00";
+    const createLink = rawBody.repository.html_url;
+    let color = "#ADFF2F";
     
     //Create Slack Message
     var slackCreateMessage = {
@@ -244,7 +288,8 @@ exports.handler = async (event, context, callback) => {
           "fields": [
             { "title": "Date & Time of Event", "value": `${timestamp}`, "short": false },
             { "title": `Repository`, "value": `${repository}`, "short": true },
-            { "title": `Branch Name`, "value": `${branch}`, "short": true },
+            { "title": `${objectCreated} Name`, "value": `${object}`, "short": true },
+            { "title": `Message`, "value": `Github has detected that a ${object} has been created.`, "short": false },
             { "title": `Link`, "value": `${createLink}`, "short": false }
           ]
         }
@@ -254,6 +299,49 @@ exports.handler = async (event, context, callback) => {
     try {
 
       await postMessage(slackCreateMessage);
+      
+      callback(null, response);
+
+    } catch(e) {
+
+      console.error(e);
+
+    }
+  } else if (githubEvent === 'delete') {
+    const objectCreated = rawBody.ref_type;
+    eventType = `Deleted ${objectCreated}`;
+    let object = rawBody.ref;
+    let timestamp = moment(rawBody.repository.created_at).format('llll');
+    const repository = rawBody.repository.name;
+    const deleteLink = rawBody.repository.html_url;
+    let color = "#B22222";
+    
+    //Create Slack Message
+    var slackDeleteMessage = {
+      channel: slackChannel,
+      username: slackUsername,
+      icon_emoji: emoji,
+      attachments: [
+        {
+          "color": color,
+          "author_name": eventType
+        },
+        {
+          "color": color,
+          "fields": [
+            { "title": "Date & Time of Event", "value": `${timestamp}`, "short": false },
+            { "title": `Repository`, "value": `${repository}`, "short": true },
+            { "title": `${objectCreated} Name`, "value": `${object}`, "short": true },
+            { "title": `Message`, "value": `Github has detected that a ${object} has been deleted.`, "short": false },
+            { "title": `Link`, "value": `${deleteLink}`, "short": false }
+          ]
+        }
+      ]
+    };
+
+    try {
+
+      await postMessage(slackDeleteMessage);
       
       callback(null, response);
 
