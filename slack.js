@@ -130,8 +130,8 @@ exports.handler = async (event, context, callback) => {
 
     }
     
-  } else if (githubEvent === 'ping' && rawBody.hook.active === true) {
-    let action = "Created";
+  } else if (githubEvent === 'ping') {
+    let action = rawBody.hook.active;
     eventType = `Web Hook ${action}`;
     const zen = rawBody.zen;
     let timestamp = moment(rawBody.hook.updated_at).format('llll');
