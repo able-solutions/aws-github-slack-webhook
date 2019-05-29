@@ -71,8 +71,11 @@ exports.handler = async (event, context, callback) => {
   const body = JSON.stringify(rawBody);
   console.log(githubEvent);
   console.log(body);
+
+  console.log('Processing Payload...');
   
   if (githubEvent === 'push') {
+    console.log('Push event detected');
     eventType = "New Commit Detected";
     let branch = (rawBody.ref).split('/')[2];
     const commits = rawBody.commits[0];
@@ -131,6 +134,7 @@ exports.handler = async (event, context, callback) => {
     }
     
   } else if (githubEvent === 'ping' && rawBody.hook.active === true) {
+    console.log('Hook event detected');
     let action = "Created";
     eventType = `Web Hook ${action}`;
     const zen = rawBody.zen;
@@ -177,6 +181,7 @@ exports.handler = async (event, context, callback) => {
 
     }
   } else if (rawBody.hasOwnProperty('comment')) {
+    console.log('Comment event detected');
     eventType = "New Comment Detected";
     let timestamp = moment(rawBody.comment.created_at).format('llll');
     const commentLink = rawBody.comment.html_url;
@@ -221,7 +226,8 @@ exports.handler = async (event, context, callback) => {
       callback(null, errorResponse);
 
     }
-  } else if (rawBody.ref_type === 'branch') {
+  } else if (githubEvent === 'create') {
+    console.log('Create event detected');
     eventType = "Branch Changes Detected";
     let branch = rawBody.ref;
     let timestamp = moment(rawBody.repository.created_at).format('llll');
