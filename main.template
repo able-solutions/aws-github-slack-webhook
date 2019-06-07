@@ -1,0 +1,75 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "",
+  "Parameters": {
+    "SlackHook": {
+      "Type": "String",
+      "Default": "",
+      "Description": "Enter the unencrypted slack webhook url ifyou are not using encryption."
+    },
+    "SlackChannel": {
+      "Type": "String",
+      "Default": "",
+      "Description": "Enter the slack channel to send a message to. Channel names start with #."
+    },
+    "SlackUsername": {
+      "Type": "String",
+      "Default": "Github via AWS",
+      "Description": "Enter the slack username to user for messages. An example would be 'Github via [your name]'s AWS Account'"
+    },
+    "SlackEmoji": {
+      "Type": "String",
+      "Default": ":github:",
+      "Description": "Enter the slack emoji icon to use for messages. An example would be :aws_logo:"
+    }
+  },
+  "Resources": {
+    "SlackHookSSMParameter": {
+      "Type" : "AWS::SSM::Parameter",
+      "Properties" : {
+        "Name" : "UnencryptedHookURL",
+        "Description" : "Enter the Web Hookk url created for the designated Slack Channel",
+        "Type" : "String",
+        "Value" : {
+          "Ref": "SlackHook"
+        }
+      }
+    },
+    "SlackChannelSSMParameter": {
+      "Type" : "AWS::SSM::Parameter",
+      "Properties" : {
+        "Name" : "SlackChannel",
+        "Description" : "Enter the Slack Channel to send a message to. Channel names start with #.",
+        "Type" : "String",
+        "Value" : {
+          "Ref": "SlackChannel"
+        }
+      }
+    },
+    "SlackUsernameSSMParameter": {
+      "Type" : "AWS::SSM::Parameter",
+      "Properties" : {
+        "Name" : "SlackUsername",
+        "Description" : "Enter the Slack username to user for messages. An example would be 'Github via [your name]'s AWS Account'",
+        "Type" : "String",
+        "Value" : {
+          "Ref": "SlackUsername"
+        }
+      }
+    },
+    "SlackEmojiSSMParameter": {
+      "Type" : "AWS::SSM::Parameter",
+      "Properties" : {
+        "Name" : "SlackEmoji",
+        "Description" : "Enter the Slack Emoji icon to use for messages. An example would be :aws_logo:",
+        "Type" : "String",
+        "Value" : {
+          "Ref": "SlackEmoji"
+        }
+      }
+    }
+  },
+  "Outputs": {
+
+  }
+}
