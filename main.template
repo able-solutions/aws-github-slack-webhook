@@ -17,10 +17,25 @@
       "Default": "Github via AWS",
       "Description": "Enter the slack username to user for messages. An example would be 'Github via [your name]'s AWS Account'"
     },
-    "SlackEmoji": {
+    "GithubOAuthToken": {
       "Type": "String",
-      "Default": ":github:",
-      "Description": "Enter the slack emoji icon to use for messages. An example would be :aws_logo:"
+      "Default": "",
+      "Description": "Enter your Github OAuth Secret created in settings for the repo"
+    },
+    "GithubUser": {
+      "Type": "String",
+      "Default": "",
+      "Description": "Enter your GitHub UserName"
+    },
+    "GithubRepo": {
+      "Type": "String",
+      "Default": "",
+      "Description": "Enter the GitHub Repo name to pull from. Only the Name. not the URL"
+    },
+    "GithubBranch": {
+      "Type": "String",
+      "Default": "",
+      "Description": "Enter the Branch to use from Repo. Only the Name. not the URL"
     }
   },
   "Resources": {

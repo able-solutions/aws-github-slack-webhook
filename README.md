@@ -2,9 +2,9 @@
 
 AWS CloudFormation template and Lambda Function that is designed to accept post requests to an API Gateway endpoint  that which then forward said request to a Lambda function which will post message data to a designated Slack channel
 
-- Author: Able
+- Author: Craig Lewis
 
-- Date Created: June 2016
+- Date Created: June 2019
 
 ## What will this repository achieve? 
 
@@ -33,74 +33,36 @@ ALl the AWS resources will be created using CloudFormation and written in JSON. 
 
 5. Slack Lambda Function
 
-x
+Will post events sent from Github WebHook to designated Slack Channel
 
 6. Lambda IAM Role
 
-x
+IAM Role with relevant permissions, Lambda function requires
 
 7. CodePipeline IAM Role
 
-x
+IAM Role with relevant permissions that CodePipeline requires
 
 8. CodeBuild IAM Role
 
-x
+IAM Role with relevant permissions that CodeBuild requires
 
 9. API Gateway IAM Role
 
-x
+IAM role with relevant permissions for API endpoint to invoke Lambda Function integration configured. 
 
 10. API Gateway RESTApi
 
-x
+API Endpoint that Github will make POST requests to. This POST requests will then be proxied to the Lambda Function
 
-11. API Gateway Deployment 
-
-x
-
-12. Lambda Permission
-
-x
-
-13. CloudWatch Logs
-
-x
-
-### Updates
-
-This updates section will keep you informed of the progress made on this project:
-
-* 12/06/2018
-
-The nodejs code for the lambda is complete. This Lambda can receive Push, Member and Ping events from github via API Gateway endpoints and reformat them into slack posts. Test payload files for each Push, Member and Ping event have been created also. The config file that the Lambda pulls in, using environmental variables to help customise the slack posts is also complete. 
-
-Whats Next? - Work has been started on the CloudFormation template that will create the Lambda function, API Gateway, IAM roles,Lambda permissions. However, since scripting the CF template, work has turned towards creating a CodePipeline first. The plan is to code a full codepipeline that sources the Github repo, zips up all lambda files and then deploys the CF  templates that create all the AWS resources, making this a complete "Out of the Box" solution
-
-* 20/06/2018 @ 7:50pm
-
-Successfully deployed the codepipeline.template into CloudFormation manually. This template creates all the SSM parameters that the Slack Lambda will use as its environmental variables. The Codepipeline will create two stages. The first stage will source checkout all the code from the Github repository. The second stage will hopefully deploy the cloudformation.template. Now that CodePipeline is deployed.... We need to test and make sure the cloudfomration.template builds successfully.
-
-* 20/06/2018 @ 8:00pm
-
-The codepipeline works!!! Now on any new push and code change within the repository, the codepipeline detects this and triggers the two stages scripted. The cloudformation.template codepipeline tried to deploy failed as the Lambda function could not reference the correct artifact file that contains the slack.js script.
-
-* 26/05/2018 @ 13:00 hrs
-
-Decided to branch from master and look to rewrite this solution to fall inline with improvements and updates to methods used previously. Looking to condense and simplify the lambda code as well. 
-
-#### Prerequisites
+## Prerequisites
 
 Listed here are all the prerequisites that you require in order to deploy this "out of the box" solution that will enable real time event posts from Github to Slack via your AWS Account. These prerequisites are: 
 
-1. AWS Account
+  1. Create a Github OAuth Token here that CodePipeline will use for authentication [here](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line).
 
-2. Github Account with test repository created
+  2. Create a designated Slack Channel (if you do not have one already) [here](https://get.slack.help/hc/en-us/articles/201402297-Create-a-channel).
 
-3. OAuth Token - Create an OAuth token in GitHub and provide access to the admin:repo_hook and repo scopes.
+  3. Create a Slack Channel Webhook [here](https://get.slack.help/hc/en-gb/articles/115005265063-Incoming-webhooks-for-Slack).
 
-
-##### Instructions
-
-Instructions are to follow so watch this space! May even get some fancy input from Leah :)
-
+## Deployment Instructions
