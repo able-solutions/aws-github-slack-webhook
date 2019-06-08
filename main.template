@@ -173,7 +173,7 @@
     "PipelineBucket": {
       "Type" : "AWS::S3::Bucket",
       "Properties" : {
-        "BucketName" : { "Fn::Join": [ "-", [ "CodePipeline", "Bucket", { "Ref": "AWS::AccountId" } ] ] },
+        "BucketName" : { "Fn::Join": [ "-", [ "codepipeline", "bucket", { "Ref": "AWS::Region" }, { "Ref": "AWS::AccountId" } ] ] },
         "VersioningConfiguration": { "Status": "Enabled" },
         "Tags" : [
           { "Key": "Name", "Value": { "Fn::Join": [ "-", [ "CodePipeline", "Bucket", { "Ref": "AWS::AccountId" } ] ] } },
