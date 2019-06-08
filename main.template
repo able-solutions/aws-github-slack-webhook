@@ -558,7 +558,7 @@
       "Type" : "AWS::CodePipeline::Pipeline",
       "Properties" : {
         "ArtifactStore" : {
-          "Location" : { "Ref": "codePipelineBucket" },
+          "Location" : { "Ref": "PipelineBucket" },
           "Type" : "S3",
           "EncryptionKey": {
             "Id" : { "Ref": "CodePipelineKMS" },
@@ -588,16 +588,16 @@
                 ],
                 "Configuration":{
                   "Owner":{
-                    "Ref":"GitHubUser"
+                    "Ref":"GithubUser"
                   },
                   "Repo":{
-                    "Ref":"Repo"
+                    "Ref":"GithubRepo"
                   },
                   "Branch":{
-                    "Ref":"Branch"
+                    "Ref":"GithubBranch"
                   },
                   "OAuthToken":{
-                    "Ref":"GitHubToken"
+                    "Ref":"GithubOAuthToken"
                   },
                   "PollForSourceChanges": true
                 },
