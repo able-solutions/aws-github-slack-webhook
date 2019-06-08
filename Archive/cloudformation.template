@@ -137,9 +137,7 @@
             "EDGE"
           ]
         },
-        "Name": {
-          "Ref": "APIEndpoint"
-        }
+        "Name": "github-aws-slack"
       }
     },
     "APIGatewayResource": {

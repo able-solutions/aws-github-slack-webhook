@@ -315,6 +315,18 @@
         ]
       }
     },
+    "LambdaSlackRoleParameter": {
+      "DependsOn": [ "LambdaSlackRole" ],
+      "Type" : "AWS::SSM::Parameter",
+      "Properties" : {
+        "Name" : "LambdaSlackRole",
+        "Description" : "Enter the ARN for the LambdaSlackRole",
+        "Type" : "String",
+        "Value" : {
+          "Fn::Get": [ "LambdaSlackRole", "Arn" ]
+        }
+      }
+    },
     "CodePiplineRole": {
       "DependsOn": [ "LambdaSlackRole" ],
       "Type": "AWS::IAM::Role",
@@ -614,7 +626,7 @@
                   "RoleArn": {
                     "Fn::GetAtt": [ "CloudFormationRole", "Arn" ]
                   },
-                  "StackName": "apigw-slack",
+                  "StackName": "github-aws-slack",
                   "TemplatePath": {
                     "Fn::Join": [ "::", [ "SlackApp", "cloudformation.template" ] ]
                   },
