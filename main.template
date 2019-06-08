@@ -323,7 +323,7 @@
         "Description" : "Enter the ARN for the LambdaSlackRole",
         "Type" : "String",
         "Value" : {
-          "Fn::Get": [ "LambdaSlackRole", "Arn" ]
+          "Fn::GetAtt": [ "LambdaSlackRole", "Arn" ]
         }
       }
     },
