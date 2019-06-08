@@ -72,17 +72,6 @@
         }
       }
     },
-    "SlackEmojiSSMParameter": {
-      "Type" : "AWS::SSM::Parameter",
-      "Properties" : {
-        "Name" : "SlackEmoji",
-        "Description" : "Enter the Slack Emoji icon to use for messages. An example would be :aws_logo:",
-        "Type" : "String",
-        "Value" : {
-          "Ref": "SlackEmoji"
-        }
-      }
-    },
     "CloudFormationRole": {
       "Type": "AWS::IAM::Role",
       "Properties": {
@@ -552,8 +541,92 @@
         }
       }
     },
-  },
-  "Outputs": {
-
+    "CodePipeline": {
+      "DependsOn": [ "PipelineBucket", "CodePiplineRole" ],
+      "Type" : "AWS::CodePipeline::Pipeline",
+      "Properties" : {
+        "ArtifactStore" : {
+          "Location" : { "Ref": "codePipelineBucket" },
+          "Type" : "S3",
+          "EncryptionKey": {
+            "Id" : { "Ref": "CodePipelineKMS" },
+            "Type" : "KMS"
+          }
+        },
+        "RestartExecutionOnUpdate": true,
+        "RoleArn" : {
+          "Fn::GetAtt": [ "CodePiplineRole", "Arn" ]
+        },
+        "Stages" : [
+          {
+            "Actions": [
+              {
+                "InputArtifacts":[],
+                "Name":"Source",
+                "ActionTypeId":{
+                  "Category":"Source",
+                  "Owner":"ThirdParty",
+                  "Version":"1",
+                  "Provider":"GitHub"
+                },
+                "OutputArtifacts":[
+                  {
+                    "Name": "SlackApp"
+                  }
+                ],
+                "Configuration":{
+                  "Owner":{
+                    "Ref":"GitHubUser"
+                  },
+                  "Repo":{
+                    "Ref":"Repo"
+                  },
+                  "Branch":{
+                    "Ref":"Branch"
+                  },
+                  "OAuthToken":{
+                    "Ref":"GitHubToken"
+                  },
+                  "PollForSourceChanges": true
+                },
+                "RunOrder":1
+              }
+            ],
+            "Name": "CheckoutGithubCode"
+          },
+          {
+            "Actions": [
+              {
+                "InputArtifacts":[
+                  { "Name": "SlackApp" }
+                ],
+                "Name":"Deploy",
+                "ActionTypeId":{
+                  "Category":"Deploy",
+                  "Owner":"AWS",
+                  "Version":"1",
+                  "Provider":"CloudFormation"
+                },
+                "OutputArtifacts":[],
+                "Configuration":{
+                  "ActionMode": "CREATE_UPDATE",
+                  "Capabilities": "CAPABILITY_IAM",
+                  "RoleArn": {
+                    "Fn::GetAtt": [ "CloudFormationRole", "Arn" ]
+                  },
+                  "StackName": "apigw-slack",
+                  "TemplatePath": {
+                    "Fn::Join": [ "::", [ "SlackApp", "cloudformation.template" ] ]
+                  },
+                  "ParameterOverrides": "{ \"codePipelineArtifactName\": { \"Fn::GetArtifactAtt\" : [ \"SlackApp\", \"ObjectKey\" ] } }"
+                },
+                "RunOrder":2
+              }
+            ],
+            "Name": "DeployCloudFormation"
+          }
+        ]
+      }
+    }
   }
 }
