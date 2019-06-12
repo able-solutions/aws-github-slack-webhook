@@ -289,7 +289,7 @@ exports.handler = async (event, context, callback) => {
             { "title": "Date & Time of Event", "value": `${timestamp}`, "short": false },
             { "title": `Repository`, "value": `${repository}`, "short": true },
             { "title": `${objectCreated} Name`, "value": `${object}`, "short": true },
-            { "title": `Message`, "value": `Github has detected that a ${object} has been created.`, "short": false },
+            { "title": `Message`, "value": `Github has detected that a ${object} ${objectCreated} has been created.`, "short": false },
             { "title": `Link`, "value": `${createLink}`, "short": false }
           ]
         }
@@ -332,7 +332,7 @@ exports.handler = async (event, context, callback) => {
             { "title": "Date & Time of Event", "value": `${timestamp}`, "short": false },
             { "title": `Repository`, "value": `${repository}`, "short": true },
             { "title": `${objectCreated} Name`, "value": `${object}`, "short": true },
-            { "title": `Message`, "value": `Github has detected that a ${object} has been deleted.`, "short": false },
+            { "title": `Message`, "value": `Github has detected that a ${object} ${objectCreated} has been deleted.`, "short": false },
             { "title": `Link`, "value": `${deleteLink}`, "short": false }
           ]
         }
