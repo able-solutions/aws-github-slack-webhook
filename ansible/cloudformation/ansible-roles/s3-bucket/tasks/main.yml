@@ -1,0 +1,8 @@
+---
+# tasks file for s3-bucket
+- name: Create a bucket with key as directory, in the specified region
+  aws_s3:
+    bucket: "{{ bucket_name }}"
+    object: /ansible/api-alerter/
+    mode: create
+    region: "{{ region }}}"

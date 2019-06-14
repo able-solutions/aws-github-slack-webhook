@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  vars:
+    stack_action: "delete"
+    
+  roles:
+    - api-gateway

@@ -1,0 +1,4 @@
+---
+# vars file for s3-bucket
+region: "eu-west-1"
+bucket_name: "siliconmaze-cloudformation-store"

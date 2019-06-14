@@ -1,0 +1,13 @@
+---
+# vars file for api-alerter
+bucket_name: "siliconmaze-cloudformation-store"
+cf_template_path: "{{ role_path }}/files/cloudformation"
+cf_template_file: "api-alerter.yml"
+lambda_src_path: "{{ role_path }}/files/lambda"
+lambda_dist_path: "{{ role_path }}/files/lambda/dist"
+lambda_file: "lambda.zip"
+cloudtrail_logs_bucket_name: "siliconmaze-cloudtrail-logs"
+cloudtrail_loggroup_name: "api-alerter"
+stack_name: "api-alerter"
+region: "eu-west-2"
+stack_cloudtrail_bucket_name: "CloudTrailBucketName"

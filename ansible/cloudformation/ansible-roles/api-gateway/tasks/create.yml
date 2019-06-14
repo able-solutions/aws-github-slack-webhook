@@ -1,0 +1,55 @@
+---
+# task create 
+# Create a zip archive of /path/to/foo
+- name: create lambda.zip for deployment
+  archive:
+    path:
+      - "{{ lambda_src_path }}/cloudwatch-alerter.js"
+      - "{{ lambda_src_path }}/cloudwatch-logs-processor.js"
+    dest: "{{ lambda_dist_path }}/{{ lambda_file }}"
+    format: zip
+ 
+
+# Copy lambda.zip asset to s3 
+- name: PUT lambda code (lambda.zip) to s3 bucket
+  aws_s3:
+    bucket: "{{ bucket_name }}"
+    object: "/ansible/api-alerter/lambda/{{ lambda_file  }}"
+    src: "{{ lambda_dist_path }}/{{ lambda_file }}"
+    mode: put
+
+# Copy local .template asset to s3 before running cloudformation
+- name: PUT api-alerter.template to s3 bucket
+  aws_s3:
+    bucket: "{{ bucket_name }}"
+    object: "/ansible/api-alerter/{{ cf_template_file }}"
+    src: "{{ cf_template_path }}/{{ cf_template_file }}"
+    mode: put
+
+#-stack-name Able-Solutions-UnauthorisedAPICalls \
+#--template-body file://cloudformation.template \
+#--parameters ParameterKey=EmailAddress,ParameterValue=$EmailAddress ParameterKey=S3LambdaBucket,ParameterValue=$BucketName ParameterKey=S3BucketName,ParameterValue=$Project-cloudtrail-logs ParameterKey=CloudTrailLogGroupName,ParameterValue=$Project-cloudtrail-logs ParameterKey=SlackChannel,ParameterValue=$SlackChannel ParameterKey=SlackHook,ParameterValue=$SlackHook ParameterKey=SlackUsername,ParameterValue=Project-$Project \
+#--capabilities CAPABILITY_NAMED_IAM --profile $AWSProfile
+
+# Create a stack, pass in template from a URL, disable rollback if stack creation fails,
+# pass in some parameters to the template, provide tags for resources created
+- name: create a stack, pass in the template via an URL
+  cloudformation:
+    stack_name: "{{ stack_name }}"
+    state: present
+    region: "{{ region }}"
+    disable_rollback: true
+    template_url: "https://s3.amazonaws.com/{{ bucket_name }}/ansible/api-alerter/{{ cf_template_file }}"
+    template_parameters:
+      EmailAddress: "steve@cloudy.dog"
+      S3LambdaBucket: "{{ bucket_name }}"
+      S3BucketName: "{{ cloudtrail_logs_bucket_name }}"
+      CloudTrailLogGroupName: "{{ cloudtrail_loggroup_name }}"
+      #ansible/api-alerter/lambda/lambda.zip
+      S3LambdaKey: "ansible/api-alerter/lambda/{{ lambda_file }}"
+      SlackHook: "https://hooks.slack.com/services/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"
+      SlackChannel: "#cloudtrail-alerts"
+    tags:
+      Stack: "{{ stack_name }}"
+    ## Ansible version 2.8
+    #capabilities: "CAPABILITY_IAM"

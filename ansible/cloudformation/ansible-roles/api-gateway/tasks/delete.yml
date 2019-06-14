@@ -1,0 +1,15 @@
+---
+- name: check if stack already exists?
+  command: aws cloudformation describe-stacks --stack-name "{{ stack_name }}"
+  register: stack_status
+  ignore_errors: yes
+
+- debug:
+      var: stack_status
+
+- name: Delete stack
+  cloudformation:
+    stack_name: "{{ stack_name }}"
+    state: "absent"
+    region: "{{ region }}"
+  when: "'Stack with id {{ stack_name }} does not exist' not in stack_status.stderr"

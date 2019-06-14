@@ -1,0 +1,6 @@
+---
+# tasks file for s3-bucket-delete
+- name: Delete a bucket and all contents
+  aws_s3:
+    bucket: "{{ bucket_name }}"
+    mode: delete
