@@ -1,0 +1,10 @@
+---
+- name: this is a play at the top level of a file
+  hosts: localhost
+  vars:
+    stack_action: "delete"
+    ansible_base_path: "{{ role_path }}"
+      
+
+  roles:
+    - cloudformation/deploy-lambda

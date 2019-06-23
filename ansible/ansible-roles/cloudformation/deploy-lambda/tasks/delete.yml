@@ -1,0 +1,16 @@
+---
+- name: check if stack already exists?
+  command: aws cloudformation describe-stacks --stack-name {{ stack_name }} --region {{ region }}
+  register: stack_status
+  ignore_errors: yes
+
+- debug:
+    var: stack_status
+
+- name: Delete stack
+  cloudformation:
+    stack_name: "{{ stack_name }}"
+    state: "absent"
+    region: "{{ region }}"
+  when: "stack_name not in stack_status.stderr"
+# An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id slack-alerter does not exist

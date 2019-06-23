@@ -1,0 +1,65 @@
+---
+# Execute mpm install to generate the node_modules
+- name: Install NodeJS packages defined in a given package.json.
+  npm:
+    path: "{{ lambda_src_path }}"
+
+# Create a zip archive of /path/to/foo
+- name: create lambda.zip for deployment
+  archive:
+    path:
+      - "{{ lambda_src_path }}/slack.js"
+      - "{{ lambda_src_path }}/package.json"
+      - "{{ lambda_src_path }}/node_modules"
+    dest: "{{ lambda_dist_path }}/{{ lambda_deploy_file }}"
+    format: zip
+
+#- pause:
+
+- debug:
+    msg:
+      - "ansible_base_path={{ ansible_base_path }}"
+      - "lambda_src_path={{ lambda_src_path }}"
+      - "lambda_dist_path={{ lambda_dist_path }}"
+      - "zip={{ lambda_dist_path }}/{{ lambda_deploy_file }}"
+    verbosity: 2
+ 
+#- pause:
+
+# Copy lambda.zip asset to s3 
+- name: PUT lambda code (lambda.zip) to s3 bucket
+  aws_s3:
+    bucket: "{{ bucket_name }}"
+    object: "{{ Lambda_s3_prefix }}/{{ lambda_deploy_file  }}"
+    src: "{{ lambda_dist_path }}/{{ lambda_deploy_file }}"
+    mode: put
+
+# Copy local .template asset to s3 before running cloudformation
+- name: PUT api-alerter.template to s3 bucket
+  aws_s3:
+    bucket: "{{ bucket_name }}"
+    object: "{{cf_s3_prefix}}/{{ cf_template_file }}"
+    src: "{{ cf_template_path }}/{{ cf_template_file }}"
+    mode: put
+
+# Create a stack, pass in template from a URL, disable rollback if stack creation fails,
+# pass in some parameters to the template, provide tags for resources created
+- name: create a stack, pass in the template via an s3 URL
+  cloudformation:
+    stack_name: "{{ stack_name }}"
+    state: present
+    changeset_name: "Change"
+    create_changeset: yes
+    region: "{{ region }}"
+    disable_rollback: true
+    template_url: "https://s3.amazonaws.com/{{ bucket_name }}/{{ cf_s3_prefix }}/{{ cf_template_file }}"
+    template_parameters:
+      EmailAddress: "steve@cloudy.dog"
+      S3LambdaBucket: "{{ bucket_name }}"
+      S3LambdaKey: "{{ Lambda_s3_prefix }}/{{ lambda_deploy_file }}"
+      SlackHook: "https://hooks.slack.com/services/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"
+      SlackChannel: "#cloudtrail-alerts"
+    tags:
+      Stack: "{{ stack_name }}"
+    ## Ansible version 2.8
+    #capabilities: "CAPABILITY_IAM"

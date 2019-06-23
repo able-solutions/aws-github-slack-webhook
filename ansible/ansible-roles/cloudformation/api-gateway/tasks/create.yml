@@ -1,0 +1,25 @@
+---
+# task create 
+
+# Create a stack, pass in template from a URL, disable rollback if stack creation fails,
+# pass in some parameters to the template, provide tags for resources created
+- name: create a stack, pass in the template via an URL
+  cloudformation:
+    stack_name: "{{ stack_name }}"
+    state: present
+    region: "{{ region }}"
+    disable_rollback: true
+    template_url: "https://s3.amazonaws.com/{{ bucket_name }}/ansible/api-alerter/{{ cf_template_file }}"
+    template_parameters:
+      EmailAddress: "steve@cloudy.dog"
+      S3LambdaBucket: "{{ bucket_name }}"
+      S3BucketName: "{{ cloudtrail_logs_bucket_name }}"
+      CloudTrailLogGroupName: "{{ cloudtrail_loggroup_name }}"
+      #ansible/api-alerter/lambda/lambda.zip
+      S3LambdaKey: "ansible/api-alerter/lambda/{{ lambda_file }}"
+      SlackHook: "https://hooks.slack.com/services/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"
+      SlackChannel: "#cloudtrail-alerts"
+    tags:
+      Stack: "{{ stack_name }}"
+    ## Ansible version 2.8
+    #capabilities: "CAPABILITY_IAM"

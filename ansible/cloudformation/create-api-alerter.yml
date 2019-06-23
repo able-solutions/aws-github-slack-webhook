@@ -1,6 +1,0 @@
----
-- hosts: localhost
-  vars:
-    stack_action: "create"
-  roles:
-    - api-gateway
