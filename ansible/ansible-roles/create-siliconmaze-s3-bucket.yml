@@ -1,4 +1,4 @@
 ---
 - hosts: localhost
   roles:
-    - s3-bucket
+    - cloudformation/s3-bucket

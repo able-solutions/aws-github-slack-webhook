@@ -1,1 +1,10 @@
 ---
+# vars file for api-gateway
+
+stack_name: "slack-apigw"
+lambda_name: "Slack-Alerter"
+bucket_name: "siliconmaze-cloudformation-store"
+cf_template_path: "files/cloudformation"
+cf_template_file: "apigw-slack.yml"
+cf_s3_prefix: "ansible/slack-apigw/cloudformation"
+region: "eu-west-2"

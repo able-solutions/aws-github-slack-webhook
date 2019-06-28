@@ -3,18 +3,60 @@ Description: >-
   This is the primary CloudFormation template that creates all API Gateway and
   Lambda resources, allowing Github to post event data to Slack.
 Parameters:
-  LambdaName:
-    Type: String
+  codePipelineBucket:
+    Type: 'AWS::SSM::Parameter::Value<String>'
+    Default: codePipelineBucket
     Description: >-
-      Enter the name of the Lambda function.
-    Default: 'Slack-Alerter'
-  LambdaArn:
+      Enter the S3 bucket name that CodePipeline uses to pull the repository
+      code from Github into.
+  codePipelineArtifactName:
     Type: String
-    Description: >-
-      Enter the arn of the Lambda function.
     Default: ''
+    Description: >-
+      Enter the name of the CodePipeline Artifact .zip file in the CodePipeline
+      S3 Bucket.
+  codePipelineArtifactFolder:
+    Type: 'AWS::SSM::Parameter::Value<String>'
+    Default: codePipelineArtifactName
+    Description: >-
+      Enter the name of the CodePipeline Artifact .zip file in the CodePipeline
+      S3 Bucket.
+  UnencryptedHookURL:
+    Type: 'AWS::SSM::Parameter::Value<String>'
+    Default: UnencryptedHookURL
+    Description: Enter the unencrypted slack webhook url ifyou are not using encryption.
+  SlackChannel:
+    Type: 'AWS::SSM::Parameter::Value<String>'
+    Default: SlackChannel
+    Description: 'Enter the slack channel to send a message to. Channel names start with #.'
+  SlackUsername:
+    Type: 'AWS::SSM::Parameter::Value<String>'
+    Default: SlackUsername
+    Description: >-
+      Enter the slack username to user for messages. An example would be 'Github
+      via [your name]'s AWS Account'
+  IconEmoji:
+    Type: 'AWS::SSM::Parameter::Value<String>'
+    Default: IconEmoji
+    Description: >-
+      Enter the slack emoji icon to use for messages. An example would be
+      :aws_logo:
+  OrgIcon:
+    Type: 'AWS::SSM::Parameter::Value<String>'
+    Default: OrgIcon
+    Description: >-
+      Enter the url to icon for your organization for display in the footer of
+      messages.
+  OrgName:
+    Type: 'AWS::SSM::Parameter::Value<String>'
+    Default: OrgName
+    Description: Enter the name of your organisation for display in the footer of messages.
+  LambdaSlackRole:
+    Type: 'AWS::SSM::Parameter::Value<String>'
+    Default: LambdaSlackRole
+    Description: Enter the Arn of the Lambda Slack Role.
   APIEndpoint:
-    Type: String
+    Type: 'AWS::SSM::Parameter::Value<String>'
     Default: APIEndpoint
     Description: >-
       Enter a name for the / API Endpoint you desire. For example
@@ -78,6 +120,7 @@ Resources:
       PathPart: !Ref APIEndpoint
   APIGatewayMethod:
     DependsOn:
+      - LambdaSlackFunction
       - APIGatewayResource
       - LambdaSlackPermissionPOST
     Type: 'AWS::ApiGateway::Method'
@@ -96,12 +139,9 @@ Resources:
           - - 'arn:aws:apigateway:'
             - !Ref 'AWS::Region'
             - ':lambda:path/2015-03-31/functions/'
-            - 'arn:aws:lambda:'
-            - !Ref 'AWS::Region'
-            - ':'
-            - !Ref 'AWS::AccountId'
-            - ':function:'
-            - !Ref LambdaName
+            - !GetAtt 
+              - LambdaSlackFunction
+              - Arn
             - /invocations
       MethodResponses:
         - StatusCode: 200
@@ -113,24 +153,38 @@ Resources:
       RestApiId: !Ref APIGatewayRestAPI
       Description: Live deployment used for slack
       StageName: slack
+  LambdaSlackFunction:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      Description: ''
+      Handler: slack.handler
+      Role: !Ref LambdaSlackRole
+      Code:
+        S3Bucket: !Ref codePipelineBucket
+        S3Key: !Ref codePipelineArtifactName
+      Environment:
+        Variables:
+          UnencryptedHookURL: !Ref UnencryptedHookURL
+          SlackChannel: !Ref SlackChannel
+          SlackUsername: !Ref SlackUsername
+          IconEmoji: !Ref IconEmoji
+          OrgIcon: !Ref OrgIcon
+          OrgName: !Ref OrgName
+      Runtime: nodejs8.10
+      MemorySize: '512'
+      Timeout: '60'
   LambdaSlackPermissionPOST:
     Type: 'AWS::Lambda::Permission'
     DependsOn:
+      - LambdaSlackFunction
       - APIGatewayRestAPI
     Properties:
-      FunctionName:
-        # arn:aws:lambda:eu-west-2:852925057554:function:Slack-Alerter 
-        !Join 
-          - ''
-          - - 'arn:aws:lambda:'
-            - !Ref 'AWS::Region'
-            - ':'
-            - !Ref 'AWS::AccountId'
-            - ':function:'
-            - !Ref LambdaName
+      FunctionName: !GetAtt 
+        - LambdaSlackFunction
+        - Arn
       Action: 'lambda:invokeFunction'
       Principal: apigateway.amazonaws.com
-      SourceArn: !Join
+      SourceArn: !Join 
         - ''
         - - 'arn:aws:execute-api:'
           - !Ref 'AWS::Region'
