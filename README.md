@@ -77,6 +77,16 @@ I also created a private github repo, that allows me to test git commit web-hook
 
 ```git@github.com:siliconmaze/trigger-repo.git```
 
+Example bash commands to test commits in the trigger_repo where the web-hook is set to notify the API GW:
+
+```bash
+echo test3 > github-slack.txt
+git add github-slack.txt
+git commit -m "test3"
+git push
+```
+
+
 ## Deployment Instructions
 
 Lambda must have these environment variables for example...
@@ -87,7 +97,7 @@ SlackHook = ```https://hooks.slack.com/services/<unique_key>```
 SlackChannel = #repo_alerts
 IconEmoji = :github:
 
-Note: Slac uses standard emojis from 
+__Note:__ Slack uses standard emojis from
 
 ```https://www.webfx.com/tools/emoji-cheat-sheet/```
 
@@ -120,5 +130,5 @@ How to remove:
 
 ## To Do
 
-I need to add a secret to the web-hook to stop spamming of the API gateway
-
+- Add a secret to the web-hook to stop spamming of the API gateway
+- On a new API GW deployment, I need to turn on logs manually, this needs to be added to the CF template

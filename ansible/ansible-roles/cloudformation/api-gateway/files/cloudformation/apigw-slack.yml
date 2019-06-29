@@ -87,10 +87,9 @@ Resources:
       ResourceId: !Ref APIGatewayResource
       RestApiId: !Ref APIGatewayRestAPI
       Integration:
-        Type: AWS
+        Type: AWS_PROXY
         IntegrationHttpMethod: POST
-        IntegrationResponses:
-          - StatusCode: 200
+        PassthroughBehavior: WHEN_NO_MATCH
         Uri: !Join 
           - ''
           - - 'arn:aws:apigateway:'
