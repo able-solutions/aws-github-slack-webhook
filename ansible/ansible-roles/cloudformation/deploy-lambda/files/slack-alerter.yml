@@ -22,18 +22,22 @@ Parameters:
   SlackChannel:
     Type: String
     Description: >-
-      Enter the Slack channel you would like to post alerts to. This will start
-      with (# hash)
+      Enter the Slack channel you would like to post alerts to. 
+      This will start with (# hash)
     Default: ''
   SlackHook:
     Type: String
-    Description: Copy the URL for the Webhook created for the Slack channel just specified.
+    Description: Copy the URL for the Web-hook created for the Slack channel just specified.
     Default: ''
   SlackUsername:
     Type: String
     Description: >-
       Enter a username that you would like to be displayed, when messages are
       posted to Slack.
+    Default: ''
+  IconEmoji:
+    Type: String
+    Description: Emoji to use for the message created in the slack channel
     Default: ''
     
 Resources:
@@ -91,3 +95,9 @@ Resources:
         - Key: Project
           Value: Able Solutions
       Timeout: 60
+      Environment:
+        Variables:
+          SlackHook: !Ref SlackHook
+          SlackChannel: !Ref SlackChannel
+          SlackUsername: !Ref SlackUsername
+          IconEmoji: !Ref IconEmoji

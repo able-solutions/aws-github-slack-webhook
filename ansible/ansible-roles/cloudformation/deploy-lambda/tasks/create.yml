@@ -54,11 +54,12 @@
     disable_rollback: true
     template_url: "https://s3.amazonaws.com/{{ bucket_name }}/{{ cf_s3_prefix }}/{{ cf_template_file }}"
     template_parameters:
-      EmailAddress: "steve@cloudy.dog"
       S3LambdaBucket: "{{ bucket_name }}"
       S3LambdaKey: "{{ Lambda_s3_prefix }}/{{ lambda_deploy_file }}"
-      SlackHook: "https://hooks.slack.com/services/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"
-      SlackChannel: "#cloudtrail-alerts"
+      SlackUsername: "{{ slack_username }}"
+      SlackHook: "{{ slack_hook }}"
+      SlackChannel: "{{ slack_channel }}"
+      IconEmoji: "{{ icon_emoji }}" # Custom Emoji added to my slack 'siliconmaze' workspace
     tags:
       Stack: "{{ stack_name }}"
     ## Ansible version 2.8

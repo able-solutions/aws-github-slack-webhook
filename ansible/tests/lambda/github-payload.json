@@ -1,0 +1,87 @@
+{
+    "resource": "/{proxy+}",
+    "path": "/%7Bproxy+%7D",
+    "httpMethod": "POST",
+    "headers": {
+        "Accept": "*/*",
+        "content-type": "application/json",
+        "Host": "x0dno51t36.execute-api.eu-west-1.amazonaws.com",
+        "User-Agent": "GitHub-Hookshot/8a8ac33",
+        "X-Amzn-Trace-Id": "Root=1-5ceda7a3-b151637a26f5096d32c42cbd",
+        "X-Forwarded-For": "140.82.115.12",
+        "X-Forwarded-Port": "443",
+        "X-Forwarded-Proto": "https",
+        "X-GitHub-Delivery": "7d437180-818b-11e9-95cc-5c8849d7dbbd",
+        "X-GitHub-Event": "ping"
+    },
+    "multiValueHeaders": {
+        "Accept": [
+            "*/*"
+        ],
+        "content-type": [
+            "application/json"
+        ],
+        "Host": [
+            "x0dno51t36.execute-api.eu-west-1.amazonaws.com"
+        ],
+        "User-Agent": [
+            "GitHub-Hookshot/8a8ac33"
+        ],
+        "X-Amzn-Trace-Id": [
+            "Root=1-5ceda7a3-b151637a26f5096d32c42cbd"
+        ],
+        "X-Forwarded-For": [
+            "140.82.115.12"
+        ],
+        "X-Forwarded-Port": [
+            "443"
+        ],
+        "X-Forwarded-Proto": [
+            "https"
+        ],
+        "X-GitHub-Delivery": [
+            "7d437180-818b-11e9-95cc-5c8849d7dbbd"
+        ],
+        "X-GitHub-Event": [
+            "ping"
+        ]
+    },
+    "queryStringParameters": null,
+    "multiValueQueryStringParameters": null,
+    "pathParameters": {
+        "proxy": "%7Bproxy+%7D"
+    },
+    "stageVariables": null,
+    "requestContext": {
+        "resourceId": "f6of7z",
+        "resourcePath": "/{proxy+}",
+        "httpMethod": "POST",
+        "extendedRequestId": "aachlEhDDoEF82w=",
+        "requestTime": "28/May/2019:21:26:59 +0000",
+        "path": "/Test/%7Bproxy+%7D",
+        "accountId": "823785814768",
+        "protocol": "HTTP/1.1",
+        "stage": "Test",
+        "domainPrefix": "x0dno51t36",
+        "requestTimeEpoch": 1559078819785,
+        "requestId": "53ce5bce-818f-11e9-b075-8364467a94aa",
+        "identity": {
+            "cognitoIdentityPoolId": null,
+            "accountId": null,
+            "cognitoIdentityId": null,
+            "caller": null,
+            "sourceIp": "140.82.115.12",
+            "principalOrgId": null,
+            "accessKey": null,
+            "cognitoAuthenticationType": null,
+            "cognitoAuthenticationProvider": null,
+            "userArn": null,
+            "userAgent": "GitHub-Hookshot/8a8ac33",
+            "user": null
+        },
+        "domainName": "x0dno51t36.execute-api.eu-west-1.amazonaws.com",
+        "apiId": "x0dno51t36"
+    },
+    "body": "{\"zen\":\"Keep it logically awesome.\",\"hook_id\":113108963,\"hook\":{\"type\":\"Repository\",\"id\":113108963,\"name\":\"web\",\"active\":true,\"events\":[\"*\"],\"config\":{\"content_type\":\"json\",\"insecure_ssl\":\"0\",\"url\":\"https://x0dno51t36.execute-api.eu-west-1.amazonaws.com/Test/\"},\"updated_at\":\"2019-05-28T20:59:31Z\",\"created_at\":\"2019-05-28T20:59:31Z\",\"url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/hooks/113108963\",\"test_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/hooks/113108963/test\",\"ping_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/hooks/113108963/pings\",\"last_response\":{\"code\":null,\"status\":\"unused\",\"message\":null}},\"repository\":{\"id\":188589153,\"node_id\":\"MDEwOlJlcG9zaXRvcnkxODg1ODkxNTM=\",\"name\":\"aws-github-slack-webhook\",\"full_name\":\"able-solutions/aws-github-slack-webhook\",\"private\":false,\"owner\":{\"login\":\"able-solutions\",\"id\":50994712,\"node_id\":\"MDQ6VXNlcjUwOTk0NzEy\",\"avatar_url\":\"https://avatars0.githubusercontent.com/u/50994712?v=4\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/able-solutions\",\"html_url\":\"https://github.com/able-solutions\",\"followers_url\":\"https://api.github.com/users/able-solutions/followers\",\"following_url\":\"https://api.github.com/users/able-solutions/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/able-solutions/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/able-solutions/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/able-solutions/subscriptions\",\"organizations_url\":\"https://api.github.com/users/able-solutions/orgs\",\"repos_url\":\"https://api.github.com/users/able-solutions/repos\",\"events_url\":\"https://api.github.com/users/able-solutions/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/able-solutions/received_events\",\"type\":\"User\",\"site_admin\":false},\"html_url\":\"https://github.com/able-solutions/aws-github-slack-webhook\",\"description\":\"This solution when deployed, will post messages and updates from Github repositories to a specified Slack channel via API Gateway. useful if you need to keep up to date and notified when new commits or pull requests occur with your repositories. \",\"fork\":false,\"url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook\",\"forks_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/forks\",\"keys_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/keys{/key_id}\",\"collaborators_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/collaborators{/collaborator}\",\"teams_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/teams\",\"hooks_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/hooks\",\"issue_events_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/issues/events{/number}\",\"events_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/events\",\"assignees_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/assignees{/user}\",\"branches_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/branches{/branch}\",\"tags_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/tags\",\"blobs_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/git/blobs{/sha}\",\"git_tags_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/git/tags{/sha}\",\"git_refs_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/git/refs{/sha}\",\"trees_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/git/trees{/sha}\",\"statuses_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/statuses/{sha}\",\"languages_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/languages\",\"stargazers_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/stargazers\",\"contributors_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/contributors\",\"subscribers_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/subscribers\",\"subscription_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/subscription\",\"commits_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/commits{/sha}\",\"git_commits_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/git/commits{/sha}\",\"comments_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/comments{/number}\",\"issue_comment_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/issues/comments{/number}\",\"contents_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/contents/{+path}\",\"compare_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/compare/{base}...{head}\",\"merges_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/merges\",\"archive_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/{archive_format}{/ref}\",\"downloads_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/downloads\",\"issues_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/issues{/number}\",\"pulls_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/pulls{/number}\",\"milestones_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/milestones{/number}\",\"notifications_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/notifications{?since,all,participating}\",\"labels_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/labels{/name}\",\"releases_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/releases{/id}\",\"deployments_url\":\"https://api.github.com/repos/able-solutions/aws-github-slack-webhook/deployments\",\"created_at\":\"2019-05-25T16:32:37Z\",\"updated_at\":\"2019-05-25T16:53:56Z\",\"pushed_at\":\"2019-05-28T07:54:47Z\",\"git_url\":\"git://github.com/able-solutions/aws-github-slack-webhook.git\",\"ssh_url\":\"git@github.com:able-solutions/aws-github-slack-webhook.git\",\"clone_url\":\"https://github.com/able-solutions/aws-github-slack-webhook.git\",\"svn_url\":\"https://github.com/able-solutions/aws-github-slack-webhook\",\"homepage\":null,\"size\":1682,\"stargazers_count\":0,\"watchers_count\":0,\"language\":\"JavaScript\",\"has_issues\":true,\"has_projects\":true,\"has_downloads\":true,\"has_wiki\":true,\"has_pages\":false,\"forks_count\":0,\"mirror_url\":null,\"archived\":false,\"disabled\":false,\"open_issues_count\":1,\"license\":null,\"forks\":0,\"open_issues\":1,\"watchers\":0,\"default_branch\":\"master\"},\"sender\":{\"login\":\"able-solutions\",\"id\":50994712,\"node_id\":\"MDQ6VXNlcjUwOTk0NzEy\",\"avatar_url\":\"https://avatars0.githubusercontent.com/u/50994712?v=4\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/able-solutions\",\"html_url\":\"https://github.com/able-solutions\",\"followers_url\":\"https://api.github.com/users/able-solutions/followers\",\"following_url\":\"https://api.github.com/users/able-solutions/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/able-solutions/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/able-solutions/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/able-solutions/subscriptions\",\"organizations_url\":\"https://api.github.com/users/able-solutions/orgs\",\"repos_url\":\"https://api.github.com/users/able-solutions/repos\",\"events_url\":\"https://api.github.com/users/able-solutions/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/able-solutions/received_events\",\"type\":\"User\",\"site_admin\":false}}",
+    "isBase64Encoded": false
+}
