@@ -128,7 +128,11 @@ How to remove:
 
 ```ansible-playbook delete-slack-alerter.yml -vvvv```
 
+Once the new API is deployed, we need to ensure that the github repo is updated with the correct new endpoint. In the future, I will resolve this by using route 53 CNAME.
+
 ## To Do
 
 - Add a secret to the web-hook to stop spamming of the API gateway
 - On a new API GW deployment, I need to turn on logs manually, this needs to be added to the CF template
+- Add stack exports to allow lookup using known stack-name to find the lambda arn when creating the API gateway.
+  - This is due to independent deploys of the Lambda function and gateway. When I move to pipeline, I will merge these to show another approach ie one stack for both Lambda and APIGateway
