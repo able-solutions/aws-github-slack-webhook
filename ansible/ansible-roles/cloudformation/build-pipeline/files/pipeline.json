@@ -1,3 +1,4 @@
+
 {
     "AWSTemplateFormatVersion": "2010-09-09",
     "Description": "This is the primary CloudFormation template that creates all API Gateway and Lambda resources, allowing Github to post event data to Slack.",
