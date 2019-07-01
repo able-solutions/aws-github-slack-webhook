@@ -1,0 +1,8 @@
+---
+- name: this is a play at the top level of a file
+  hosts: localhost
+  vars:
+    stack_action: "create"
+    ansible_base_path: "{{ role_path }}"
+  roles:
+    - cloudformation/build-pipeline

@@ -25,3 +25,5 @@ codePipelineBucket	able710-buildbucket
 
 ====
 
+https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#structure-configuration-examples
+

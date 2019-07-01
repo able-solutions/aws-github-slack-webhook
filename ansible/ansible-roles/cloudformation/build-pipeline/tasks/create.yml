@@ -6,12 +6,14 @@
     aws_secret_key: "{{ aws_secret_key | default(lookup('env', 'AWS_SECRET_ACCESS_KEY')) }}"
 
 # Copy local .template asset to s3 before running cloudformation (During stack creation we source the template from s3)
-- name: PUT pipeline cloudformtion template to s3 bucket
+- name: PUT pipeline cloudformation template to s3 bucket
   aws_s3:
     bucket: "{{ bucket_name }}"
     object: "{{cf_s3_prefix}}/{{ cf_template_file }}"
     src: "{{ cf_template_path }}/{{ cf_template_file }}"
     mode: put
+
+#- pause:
 
 # Create a stack, pass in template from a URL, disable rollback if stack creation fails,
 # pass in some parameters to the template, provide tags for resources created.
@@ -23,15 +25,15 @@
     disable_rollback: true
     template_url: "https://s3.amazonaws.com/{{ bucket_name }}/{{ cf_s3_prefix }}/{{ cf_template_file }}"
     template_parameters:
-      GithubPersonalAccessToken: "{{ github_personal_access_token_}}"
-      GithubUser: "{{ github_usern}}"
-      GitHubRepo: "{{ github_repo }}"
-      GitHubBranch: "{{ github_branch }}"
+      GithubPersonalAccessToken: "{{ github_personal_access_token}}"
+      GithubUsername: "{{ github_username}}"
+      GithubRepo: "{{ github_repo }}"
+      GithubBranch: "{{ github_branch }}"
       SlackUsername: "{{ slack_username }}"
       SlackHook: "{{ slack_hook }}"
       SlackChannel: "{{ slack_channel }}"
-      IconEmoji: "{{ icon_emoji }}" # Custom Emoji added to my slack 'siliconmaze' workspace
-      LambdaName: "{{ lambda_name }}"
+      #IconEmoji: "{{ icon_emoji }}" # Custom Emoji added to my slack 'siliconmaze' workspace
+      #LambdaName: "{{ lambda_name }}"
 
     tags:
       Stack: "{{ stack_name }}"

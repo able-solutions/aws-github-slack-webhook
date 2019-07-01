@@ -35,11 +35,15 @@ A list of other roles hosted on Galaxy should go here, plus any details in regar
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+Create the stack:
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+ansible-playbook delete-pipeline.yml -vvvv
+
+Delete the stack
+
+ansible-playbook create-pipeline.yml -vvvv
+
+__Note:__ -vvvv is full trace mode for ansible.
 
 License
 -------

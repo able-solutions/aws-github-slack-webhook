@@ -15,11 +15,11 @@ Parameters:
     Description: >-
       Enter the slack username to act as message authir. An example would be 'Github
       via [your name]'s AWS Account'
-  GithubOAuthToken:
+  GithubPersonalAccessToken:
     Type: String
     Default: ''
     Description: Enter your Github OAuth Secret created in settings for the repo
-  GithubUser:
+  GithubUsername:
     Type: String
     Default: ''
     Description: Enter your GitHub UserName
@@ -426,10 +426,10 @@ Resources:
               OutputArtifacts:
                 - Name: SlackApp
               Configuration:
-                Owner: !Ref GithubUser
+                Owner: !Ref GithubUsername
                 Repo: !Ref GithubRepo
                 Branch: !Ref GithubBranch
-                OAuthToken: !Ref GithubOAuthToken
+                OAuthToken: !Ref GithubPersonalAccessToken
                 PollForSourceChanges: true
               RunOrder: 1
           Name: CheckoutGithubCode
