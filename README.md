@@ -58,11 +58,11 @@ Listed here are all the prerequisites that you require in order to deploy this "
 3. Create a Github OAuth Token here that github will use for authentication [here](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line).
 
 ```text
-Essentially in GitHub, we create an oauth integration within my  trigger_repo for testing
+Essentially in GitHub, we create an oauth integration within my  trigger_repo for testing a pipeline, but for a non Code Pipeline solution, we only need a personal access token. Git Hub account: Settings/Developer settings/Peronal access tokens
 
-In my example, I used the SiliconMaze (steve@cloudy.dog) GitHub Account. Initially.
+In my example, I used the SiliconMaze (steve@cloudy.dog) GitHub Account. Initially and created a new repo called https://github.com/siliconmaze/trigger-repo.
 
-Note:  This web-hook does not use a secret, so someone could end up spiking the API Gateway if they figured out the API end point URL. 
+Note:  This web-hook does not use a 'secret', so someone could end up spiking the API Gateway if they figured out the API end point URL. 
 ```
 
 ## Development/Testing Instructions

@@ -13,7 +13,7 @@ Parameters:
     Type: String
     Default: Github via AWS
     Description: >-
-      Enter the slack username to user for messages. An example would be 'Github
+      Enter the slack username to act as message authir. An example would be 'Github
       via [your name]'s AWS Account'
   GithubOAuthToken:
     Type: String

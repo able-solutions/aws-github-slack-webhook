@@ -1,7 +1,21 @@
-Role Name
+build pipeline
 =========
 
-A brief description of the role goes here.
+This role uses CodePipeline and iscreated via CloudFormation. The CloudFormation creates the CodepPieline, CodeBuild etc, lambda, and apigw.
+For the CloudFormation to work we need to create an OAuth Token in the main GitHub account settings. It is known as creating an Application Registration.
+
+Naviation in GitHub: Settings/Developer settings/Personal access tokens.
+
+__repo__
+- repo:status  Access commit status
+- repo_deployment  Access deployment status
+
+__admin:repo_hook__
+ - write:repo_hook  Write repository hooks
+ - read:repo_hook  Read repository hooks
+
+__Note:__ The Personal Access Token is not knowm and cannot be used because the repo is in Able, not SiliconMaze. For now, I will need duplicate this code, so I can test different scenarios until I have access to Able Admin.
+
 
 Requirements
 ------------
