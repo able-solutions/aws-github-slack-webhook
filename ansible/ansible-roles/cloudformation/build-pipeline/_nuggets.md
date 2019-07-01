@@ -1,5 +1,11 @@
 # Nuggets
 
+Links and Ideas for Deploying Lambda using CodePipeline
+
+https://docs.aws.amazon.com/lambda/latest/dg/build-pipeline.html
+
+====
+
 Example CF Stack create by Able Solution's last deployment of the stack.
 
 APIEndpoint	github	-
@@ -16,3 +22,6 @@ StackActionMode	CREATE_UPDATE	-
 StackName	Slack-APIGateway	-
 UnencryptedHookURL	https://hooks.slack.com/services/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	-
 codePipelineBucket	able710-buildbucket
+
+====
+

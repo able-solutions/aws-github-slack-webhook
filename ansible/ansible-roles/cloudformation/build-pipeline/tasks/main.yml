@@ -1,2 +1,10 @@
 ---
 # tasks file for build-pipeline
+
+# when stack_action='create' has been defined in playbook, then we will run the create.yml tasks
+- include_tasks: create.yml
+  when: stack_action is defined and stack_action == 'create'
+
+# when stack_action='delete' has been defined in playbook, then we will run the delete.yml tasks
+- include_tasks: delete.yml
+  when: stack_action is defined and stack_action == 'delete'
