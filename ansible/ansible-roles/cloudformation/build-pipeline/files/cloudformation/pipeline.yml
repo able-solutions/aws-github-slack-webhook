@@ -4,7 +4,7 @@ Parameters:
   SlackHook:
     Type: String
     Default: ''
-    Description: Enter the unencrypted slack webhook url ifyou are not using encryption.
+    Description: Enter the unencrypted slack web-hook url if you are not using encryption.
   SlackChannel:
     Type: String
     Default: ''
@@ -13,7 +13,7 @@ Parameters:
     Type: String
     Default: Github via AWS
     Description: >-
-      Enter the slack username to act as message authir. An example would be 'Github
+      Enter the slack username to act as message author. An example would be 'Github
       via [your name]'s AWS Account'
   GithubUsername:
     Type: String
@@ -449,7 +449,7 @@ Resources:
                 TemplatePath: !Join 
                   - '::'
                   - - SlackApp
-                    - cloudformation.template
+                    - pipeline-test.yml
                 ParameterOverrides: >-
                   { "codePipelineArtifactName": { "Fn::GetArtifactAtt" : [
                   "SlackApp", "ObjectKey" ] } }
