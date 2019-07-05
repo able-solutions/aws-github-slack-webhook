@@ -27,3 +27,10 @@ codePipelineBucket	able710-buildbucket
 
 https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#structure-configuration-examples
 
+====
+
+Storing a public access token in ansible as a var and used in the ansible CloudFormation plugin, means that the token is stored in the code, and I think git hub removes this token immediately if it detects it in a commit. It will work on the stack creation, but subsequent calls it will fail.
+
+Solution: Use AWS secrets manager to store the github personal access token.
+
+https://medium.com/@eoins/securing-github-tokens-in-a-serverless-codepipeline-dc3a24ddc356
