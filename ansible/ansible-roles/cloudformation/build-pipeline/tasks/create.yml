@@ -29,7 +29,6 @@
       GithubRepo: "{{ github_repo }}"
       GithubBranch: "{{ github_branch }}"
       SlackUsername: "{{ slack_username }}"
-      SlackHook: "{{ slack_hook }}"
       SlackChannel: "{{ slack_channel }}"
       #IconEmoji: "{{ icon_emoji }}" # Custom Emoji added to my slack 'siliconmaze' workspace
       #LambdaName: "{{ lambda_name }}"

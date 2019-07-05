@@ -13,6 +13,6 @@ github_username: "able-solutions" #Github username, not email
 github_repo: "aws-github-slack-webhook"
 github_branch: "SR-001"
 slack_username: "GitHub via AWS" #Just a name for the entity that creates the channel message
-slack_hook: "https://hooks.slack.com/services/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"
+#able-solutions slack hook, now in secrets manager
 slack_channel: "#repo_alerts"
 icon_emoji: ":github:"
