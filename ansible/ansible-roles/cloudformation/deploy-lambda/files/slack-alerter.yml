@@ -25,10 +25,6 @@ Parameters:
       Enter the Slack channel you would like to post alerts to. 
       This will start with (# hash)
     Default: ''
-  SlackHook:
-    Type: String
-    Description: Copy the URL for the Web-hook created for the Slack channel just specified.
-    Default: ''
   SlackUsername:
     Type: String
     Description: >-
@@ -97,7 +93,7 @@ Resources:
       Timeout: 60
       Environment:
         Variables:
-          SlackHook: !Ref SlackHook
+          SlackHook: "{{resolve:secretsmanager:AbleSolutionsSlackHook:SecretString:able-solutions-slack-hook}}"
           SlackChannel: !Ref SlackChannel
           SlackUsername: !Ref SlackUsername
           IconEmoji: !Ref IconEmoji

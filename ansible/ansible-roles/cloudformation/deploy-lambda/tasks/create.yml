@@ -57,7 +57,6 @@
       S3LambdaBucket: "{{ bucket_name }}"
       S3LambdaKey: "{{ Lambda_s3_prefix }}/{{ lambda_deploy_file }}"
       SlackUsername: "{{ slack_username }}"
-      SlackHook: "{{ slack_hook }}"
       SlackChannel: "{{ slack_channel }}"
       IconEmoji: "{{ icon_emoji }}" # Custom Emoji added to my slack 'siliconmaze' workspace
     tags:

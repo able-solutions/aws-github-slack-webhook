@@ -13,6 +13,5 @@ cf_template_file: "slack-alerter.yml"
 cf_s3_prefix: "ansible/build-pipeline/cloudformation"
 region: "eu-west-2"
 slack_username: "GitHub via AWS" #Just a name for the entity that creates the channel message
-slack_hook: "https://hooks.slack.com/services/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"
 slack_channel: "#repo_alerts"
 icon_emoji: ":github:"
