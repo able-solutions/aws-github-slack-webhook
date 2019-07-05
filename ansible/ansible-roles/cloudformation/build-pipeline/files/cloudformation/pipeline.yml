@@ -450,8 +450,8 @@ Resources:
                   - '::'
                   - - SlackApp
                     - pipeline-test.yml
-                ParameterOverrides: >-
-                  { "codePipelineArtifactName": { "Fn::GetArtifactAtt" : [
-                  "SlackApp", "ObjectKey" ] } }
+                #ParameterOverrides: >-
+                #  { "codePipelineArtifactName": { "Fn::GetArtifactAtt" : [
+                #  "SlackApp", "ObjectKey" ] } }
               RunOrder: 2
           Name: DeployCloudFormation
