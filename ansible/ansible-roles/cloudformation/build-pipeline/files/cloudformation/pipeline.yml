@@ -36,7 +36,7 @@ Resources:
     Type: 'AWS::SSM::Parameter'
     Properties:
       Name: UnencryptedHookURL
-      Description: Enter the Web Hookk url created for the designated Slack Channel
+      Description: Enter the Web Hook url created for the designated Slack Channel
       Type: String
       Value: !Ref SlackHook
   SlackChannelSSMParameter:
