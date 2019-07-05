@@ -425,7 +425,7 @@ Resources:
                 Owner: !Ref GithubUsername
                 Repo: !Ref GithubRepo
                 Branch: !Ref GithubBranch
-                OAuthToken: !Ref "{{resolve:secretsmanager:AbleSolutionsPersonalAccessToken:SecretString:able-solutions-personal-access-token}}"
+                OAuthToken: "{{resolve:secretsmanager:AbleSolutionsPersonalAccessToken:SecretString:able-solutions-personal-access-token}}"
                 PollForSourceChanges: true
               RunOrder: 1
           Name: CheckoutGithubCode

@@ -25,7 +25,6 @@
     disable_rollback: true
     template_url: "https://s3.amazonaws.com/{{ bucket_name }}/{{ cf_s3_prefix }}/{{ cf_template_file }}"
     template_parameters:
-      GithubPersonalAccessToken: "{{ github_personal_access_token }}"
       GithubUsername: "{{ github_username}}"
       GithubRepo: "{{ github_repo }}"
       GithubBranch: "{{ github_branch }}"

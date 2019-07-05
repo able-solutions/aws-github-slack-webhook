@@ -8,8 +8,7 @@ cf_template_path: "files/cloudformation"
 cf_template_file: "pipeline.yml"
 cf_s3_prefix: "ansible/build-pipeline/cloudformation"
 region: "eu-west-2"
-#able-solutions personal access token called AWS CodePipeline SiliconMaze
-github_personal_access_token: "054b04b89eed4d3ff0ae91629717eeed891f73e5"
+#able-solutions personal access token called AWS CodePipeline SiliconMaze in GitHub added to AWS secret Manager
 github_username: "able-solutions" #Github username, not email
 github_repo: "aws-github-slack-webhook"
 github_branch: "SR-001"
