@@ -5,7 +5,7 @@
     "GitHubToken":{
       "NoEcho":"true",
       "Type":"String",
-      "Default": "4b4ff2f670f699d2965b6a4f9ec9288f2ec9dac8",
+      "Default": "",
       "Description":"Enter your Github OAuth Secret created in settings for the repo. It might look something like 9b189a1654643522561f7b3ebd44a1531a4287af OAuthToken with access to Repo. Go to https://github.com/settings/tokens"
     },
     "GitHubUser":{
@@ -47,7 +47,7 @@
     },
     "UnencryptedHookURL": {
       "Type": "String",
-      "Default": "https://hooks.slack.com/services/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",
+      "Default": "",
       "Description": "Enter the unencrypted slack webhook url ifyou are not using encryption."
     },
     "SlackChannel": {
