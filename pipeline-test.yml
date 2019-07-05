@@ -1,2 +1,10 @@
-MyS3Bucket:
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  S3Bucket:
     Type: AWS::S3::Bucket
+Outputs:
+  S3Bucket:
+    Value: !GetAtt 
+      - S3Bucket
+    Description: S3 Bucket
+  
