@@ -58,8 +58,26 @@ Image version – Latest
 
 Buildspec name – buildspec.yml
 
+====
+
+These are all documents that I referenced..
+
 
 https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-available.html
 
 https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#runtime-versions-buildspec-file
+
+https://github.com/aws-samples/aws-codebuild-samples/blob/master/cloudformation/continuous-deployment.yml
+
+
+
+====
+
+Issue when deleting a stack that was created by pipeline, but pipeline has been deleted.
+
+https://dev.to/david_j_eddy/how-to-fix-failed-to-delete-stack-role--is-invalid-or-cannot-be-assumed-in-aws-cloudformation-3aip
+
+
+Adding ectra details via Environment Variables for code build
+https://github.com/thii/aws-codebuild-extras
 

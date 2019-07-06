@@ -1,6 +1,20 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: ''
 Parameters:
+  SlackHook:
+    Type: String
+    Default: ''
+    Description: Enter the unencrypted slack web-hook url if you are not using encryption.
+  SlackChannel:
+    Type: String
+    Default: ''
+    Description: 'Enter the slack channel to send a message to. Channel names start with #.'
+  SlackUsername:
+    Type: String
+    Default: Github via AWS
+    Description: >-
+      Enter the slack username to act as message author. An example would be 'Github
+      via [your name]'s AWS Account'
   GithubUsername:
     Type: String
     Default: ''
@@ -13,11 +27,32 @@ Parameters:
     Type: String
     Default: ''
     Description: Enter the Branch to use from Repo. Only the Name. not the URL
-  StackName:
-   Type: String
-    Default: ''
-    Description: 'Name of the Code Pipeline stack'
 Resources:
+  SlackHookSSMParameter:
+    Type: 'AWS::SSM::Parameter'
+    Properties:
+      Name: UnencryptedHookURL
+      Description: Enter the Web Hook url created for the designated Slack Channel
+      Type: String
+      Value: !Ref SlackHook
+  SlackChannelSSMParameter:
+    Type: 'AWS::SSM::Parameter'
+    Properties:
+      Name: SlackChannel
+      Description: >-
+        Enter the Slack Channel to send a message to. Channel names start with
+        #.
+      Type: String
+      Value: !Ref SlackChannel
+  SlackUsernameSSMParameter:
+    Type: 'AWS::SSM::Parameter'
+    Properties:
+      Name: SlackUsername
+      Description: >-
+        Enter the Slack username to user for messages. An example would be
+        'Github via [your name]'s AWS Account'
+      Type: String
+      Value: !Ref SlackUsername
   CloudFormationRole:
     Type: 'AWS::IAM::Role'
     Properties:
@@ -27,7 +62,7 @@ Resources:
             Principal:
               AWS:
                 - !GetAtt 
-                  - CodePipelineRole
+                  - CodePiplineRole
                   - Arn
                 - !Join 
                   - ''
@@ -190,7 +225,7 @@ Resources:
       Value: !GetAtt 
         - LambdaSlackRole
         - Arn
-  CodePipelineRole:
+  CodePiplineRole:
     DependsOn:
       - LambdaSlackRole
     Type: 'AWS::IAM::Role'
@@ -362,7 +397,7 @@ Resources:
   CodePipeline:
     DependsOn:
       - PipelineBucket
-      - CodePipelineRole
+      - CodePiplineRole
     Type: 'AWS::CodePipeline::Pipeline'
     Properties:
       ArtifactStore:
@@ -373,73 +408,50 @@ Resources:
           Type: KMS
       RestartExecutionOnUpdate: true
       RoleArn: !GetAtt 
-        - CodePipelineRole
+        - CodePiplineRole
         - Arn
       Stages:
         - Actions:
-          - InputArtifacts: []
-            Name: Source
-            ActionTypeId:
-              Category: Source
-              Owner: ThirdParty
-              Version: '1'
-              Provider: GitHub
-            OutputArtifacts:
-              - Name: !Join
-                - '-'
-                - - !Ref 'AWS::StackName'
-                  - SlackAppFullRepo
-            Configuration:
-              Owner: !Ref GithubUsername
-              Repo: !Ref GithubRepo
-              Branch: !Ref GithubBranch
-              OAuthToken: "{{resolve:secretsmanager:AbleSolutionsPersonalAccessToken:SecretString:able-solutions-personal-access-token}}"
-              PollForSourceChanges: true
-            RunOrder: 1
+            - InputArtifacts: []
+              Name: Source
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Version: '1'
+                Provider: GitHub
+              OutputArtifacts:
+                - Name: SlackApp
+              Configuration:
+                Owner: !Ref GithubUsername
+                Repo: !Ref GithubRepo
+                Branch: !Ref GithubBranch
+                OAuthToken: "{{resolve:secretsmanager:AbleSolutionsPersonalAccessToken:SecretString:able-solutions-personal-access-token}}"
+                PollForSourceChanges: true
+              RunOrder: 1
           Name: CheckoutGithubCode
-      - Actions:
-        - ActionTypeId:
-            Category: Build
-            Owner: AWS
-            Provider: CodeBuild
-            Version: 1
-          Configuration:
-            ProjectName: !Ref 'AWS::StackName'
-          InputArtifacts:
-          - Name: !Join
-              - '-'
-              - - !Ref 'AWS::StackName'
-                - SlackAppFullRepo
-          OutputArtifacts:
-            - Name: !Join
-              - '-'
-              - - !Ref 'AWS::StackName'
-                - LambdaArtifact
-          RunOrder: 2
-         Name: BuildLambda
-#        - Actions:
-#            - InputArtifacts:
-#                - Name: SlackApp
-#              Name: Deploy
-#              ActionTypeId:
-#                Category: Deploy
-#                Owner: AWS
-#                Version: '1'
-#                Provider: CloudFormation
-#              OutputArtifacts: []
-#              Configuration:
-#                ActionMode: CREATE_UPDATE
-#                Capabilities: CAPABILITY_IAM
-#                RoleArn: !GetAtt 
-#                  - CloudFormationRole
-#                  - Arn
-#                StackName: github-aws-slack
-#                TemplatePath: !Join 
-#                  - '::'
-#                    - pipeline-test.yml
-#                  - - SlackApp
-#                #  { "codePipelineArtifactName": { "Fn::GetArtifactAtt" : [
-#                #ParameterOverrides: >-
-#                #  "SlackApp", "ObjectKey" ] } }
-#              RunOrder: 2
-#          Name: DeployCloudFormation
+        - Actions:
+            - InputArtifacts:
+                - Name: SlackApp
+              Name: Deploy
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Version: '1'
+                Provider: CloudFormation
+              OutputArtifacts: []
+              Configuration:
+                ActionMode: CREATE_UPDATE
+                Capabilities: CAPABILITY_IAM
+                RoleArn: !GetAtt 
+                  - CloudFormationRole
+                  - Arn
+                StackName: github-aws-slack
+                TemplatePath: !Join 
+                  - '::'
+                  - - SlackApp
+                    - pipeline-test.yml
+                #ParameterOverrides: >-
+                #  { "codePipelineArtifactName": { "Fn::GetArtifactAtt" : [
+                #  "SlackApp", "ObjectKey" ] } }
+              RunOrder: 2
+          Name: DeployCloudFormation

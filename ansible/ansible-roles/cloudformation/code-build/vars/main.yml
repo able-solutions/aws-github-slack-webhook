@@ -1,0 +1,14 @@
+---
+# vars file for code-build
+
+stack_name: "slack-app-codebuild"
+bucket_name: "siliconmaze-cloudformation-store"
+cf_template_path: "files/cloudformation"
+cf_template_file: "codebuild.yml"
+cf_s3_prefix: "ansible/code-build/cloudformation"
+region: "eu-west-2"
+github_user: "able-solutions" #Github username, not email
+github_repo_name: "aws-github-slack-webhook"
+github_repo_url: "https://github.com/able-solutions/aws-github-slack-webhook.git"
+github_branch: "SR-001"
+github_personal_access_token_ssm_parameter_name: "able-solutions-personal-access-token"

@@ -1,0 +1,34 @@
+---
+# task create
+- name: Get parameters from environment or shell variables
+  set_fact:
+    aws_access_key: "{{ aws_access_key | default(lookup('env', 'AWS_ACCESS_KEY_ID')) }}"
+    aws_secret_key: "{{ aws_secret_key | default(lookup('env', 'AWS_SECRET_ACCESS_KEY')) }}"
+
+# Copy local .template asset to s3 before running cloudformation (During stack creation we source the template from s3)
+- name: PUT CodeBuild CloudFormation template to s3 bucket
+  aws_s3:
+    bucket: "{{ bucket_name }}"
+    object: "{{cf_s3_prefix}}/{{ cf_template_file }}"
+    src: "{{ cf_template_path }}/{{ cf_template_file }}"
+    mode: put
+
+#- pause:
+
+# Create a stack, pass in template from a URL, disable rollback if stack creation fails,
+# pass in some parameters to the template, provide tags for resources created.
+- name: create a stack, pass in the template via an URL
+  cloudformation:
+    stack_name: "{{ stack_name }}"
+    state: present
+    region: "{{ region }}"
+    disable_rollback: true
+    template_url: "https://s3.amazonaws.com/{{ bucket_name }}/{{ cf_s3_prefix }}/{{ cf_template_file }}"
+    template_parameters:
+      GithubRepoName: "{{ github_repo_name }}"
+      GithubRepoURL: "{{ github_repo_url }}"
+      GithubUser: "{{ github_user }}"
+      GithubBranch: "{{ github_branch }}"
+      GithubPersonalAccessTokenSSMParameterName: "{{ github_personal_access_token_ssm_parameter_name }}"
+    tags:
+      Stack: "{{ stack_name }}"

@@ -1,0 +1,152 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  This is the primary CloudFormation template that creates all API Gateway and
+  Lambda resources, allowing Github to post event data to Slack.
+Parameters:
+  LambdaName:
+    Type: String
+    Description: >-
+      Enter the name of the Lambda function.
+    Default: 'Slack-Alerter'
+  LambdaArn:
+    Type: String
+    Description: >-
+      Enter the arn of the Lambda function.
+    Default: ''
+  APIEndpoint:
+    Type: String
+    Default: APIEndpoint
+    Description: >-
+      Enter a name for the / API Endpoint you desire. For example
+      https://{aws_apigateway_address}/Your Endpoint Name
+Resources:
+  APIGatewayRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - apigateway.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: CloudWatchLogs
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action: 'logs:*'
+                Resource: '*'
+        - PolicyName: Lambda
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action: 'lambda:*'
+                Resource: '*'
+        - PolicyName: APIGateway
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action: 'apigateway:*'
+                Resource: '*'
+  APIGatewayAccount:
+    DependsOn:
+      - APIGatewayRole
+    Type: 'AWS::ApiGateway::Account'
+    Properties:
+      CloudWatchRoleArn: !GetAtt 
+        - APIGatewayRole
+        - Arn
+  APIGatewayRestAPI:
+    DependsOn:
+      - APIGatewayAccount
+    Type: 'AWS::ApiGateway::RestApi'
+    Properties:
+      EndpointConfiguration:
+        Types:
+          - EDGE
+      Name: !Ref APIEndpoint
+  APIGatewayResource:
+    DependsOn:
+      - APIGatewayRestAPI
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref APIGatewayRestAPI
+      ParentId: !GetAtt 
+        - APIGatewayRestAPI
+        - RootResourceId
+      PathPart: !Ref APIEndpoint
+  APIGatewayMethod:
+    DependsOn:
+      - APIGatewayResource
+      - LambdaSlackPermissionPOST
+    Type: 'AWS::ApiGateway::Method'
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: POST
+      ResourceId: !Ref APIGatewayResource
+      RestApiId: !Ref APIGatewayRestAPI
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        PassthroughBehavior: WHEN_NO_MATCH
+        Uri: !Join 
+          - ''
+          - - 'arn:aws:apigateway:'
+            - !Ref 'AWS::Region'
+            - ':lambda:path/2015-03-31/functions/'
+            - 'arn:aws:lambda:'
+            - !Ref 'AWS::Region'
+            - ':'
+            - !Ref 'AWS::AccountId'
+            - ':function:'
+            - !Ref LambdaName
+            - /invocations
+      MethodResponses:
+        - StatusCode: 200
+  APIGatewayDeployment:
+    DependsOn:
+      - APIGatewayMethod
+    Type: 'AWS::ApiGateway::Deployment'
+    Properties:
+      RestApiId: !Ref APIGatewayRestAPI
+      Description: Live deployment used for slack
+      StageName: slack
+  LambdaSlackPermissionPOST:
+    Type: 'AWS::Lambda::Permission'
+    DependsOn:
+      - APIGatewayRestAPI
+    Properties:
+      FunctionName:
+        # arn:aws:lambda:eu-west-2:852925057554:function:Slack-Alerter 
+        !Join 
+          - ''
+          - - 'arn:aws:lambda:'
+            - !Ref 'AWS::Region'
+            - ':'
+            - !Ref 'AWS::AccountId'
+            - ':function:'
+            - !Ref LambdaName
+      Action: 'lambda:invokeFunction'
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Join
+        - ''
+        - - 'arn:aws:execute-api:'
+          - !Ref 'AWS::Region'
+          - ':'
+          - !Ref 'AWS::AccountId'
+          - ':'
+          - !Ref APIGatewayRestAPI
+          - /*/POST/
+          - !Ref APIEndpoint
+Outputs:
+  APIGatewayEndpoint:
+    Value: !Join 
+      - ''
+      - - 'https://'
+        - !Ref APIGatewayRestAPI
+        - .execute-api.
+        - !Ref 'AWS::Region'
+        - .amazonaws.com/
+        - slack/
+        - !Ref APIEndpoint

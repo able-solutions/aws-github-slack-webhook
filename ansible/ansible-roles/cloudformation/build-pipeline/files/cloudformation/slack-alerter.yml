@@ -1,0 +1,99 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  AWS CloudFormation template that creates all the AWS resources needed for
+  alerting when Unauthorised API calls are detected within CloudTrail
+Parameters:
+  EmailAddress:
+    Type: String
+    Description: Enter the email address that you would like to receive alerts
+    Default: ''
+  S3LambdaBucket:
+    Type: String
+    Description: Enter the name of the S3 Bucket where the lambda code is stored.
+    Default: ''
+  S3LambdaKey:
+      Type: String
+      Description: Enter the full s3 object's key path lambda.zip file.
+      Default: ''
+  S3BucketName:
+    Type: String
+    Description: Enter a name for the S3 Bucket used to store CloudTrail logs.
+    Default: ''
+  SlackChannel:
+    Type: String
+    Description: >-
+      Enter the Slack channel you would like to post alerts to. 
+      This will start with (# hash)
+    Default: ''
+  SlackUsername:
+    Type: String
+    Description: >-
+      Enter a username that you would like to be displayed, when messages are
+      posted to Slack.
+    Default: ''
+  IconEmoji:
+    Type: String
+    Description: Emoji to use for the message created in the slack channel
+    Default: ''
+    
+Resources:
+  LambdaExecutionRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: Lambda-Function-Role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+                - logs.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyName: CloudWatch
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'logs:*'
+                Resource: '*'
+        - PolicyName: Lambda
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'lambda:InvokeFunction'
+                Resource: '*'
+
+  LambdaFunctionSlack:
+    DependsOn:
+      - LambdaExecutionRole
+    Type: "AWS::Lambda::Function"
+    Properties:
+      Description: Lambda Function that processes payloads to send to slack
+      Handler: slack.handler
+## LONG  = Fn::GetAtt: [ logicalNameOfResource, attributeName ]   
+## SHORT = !GetAtt logicalNameOfResource.attributeName
+      Role: !GetAtt LambdaExecutionRole.Arn
+      FunctionName: Slack-Alerter
+      Code:
+        S3Bucket: !Ref S3LambdaBucket
+        S3Key: !Ref S3LambdaKey
+      Runtime: nodejs10.x
+      MemorySize: 128
+      Tags:
+        - Key: Name
+          Value: Slack Alerter
+        - Key: Project
+          Value: Able Solutions
+      Timeout: 60
+      Environment:
+        Variables:
+          SlackHook: "{{resolve:secretsmanager:AbleSolutionsSlackHook:SecretString:able-solutions-slack-hook}}"
+          SlackChannel: !Ref SlackChannel
+          SlackUsername: !Ref SlackUsername
+          IconEmoji: !Ref IconEmoji

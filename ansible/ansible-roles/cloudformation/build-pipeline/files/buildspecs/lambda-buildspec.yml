@@ -1,0 +1,21 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - echo Build started on `date`
+      - npm install
+  post_build:
+    commands:
+      - echo Running post_build commands
+      - mkdir build-output
+      - cp -R src/slack.js.js build-output
+      - mkdir -p build-output/node_modules
+      - cp -R src/node_modules/* build-output/node_modules
+      - cd build-output/
+      - zip -qr build-output.zip ./*
+      - mv build-output.zip ../
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - build-output.zip
