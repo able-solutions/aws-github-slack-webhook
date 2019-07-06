@@ -20,7 +20,7 @@ SlackChannel	#repo_alerts	-
 SlackUsername	Github via AWS	-
 StackActionMode	CREATE_UPDATE	-
 StackName	Slack-APIGateway	-
-UnencryptedHookURL	https://hooks.slack.com/services/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	-
+UnencryptedHookURL	****	-
 codePipelineBucket	able710-buildbucket
 
 ====
@@ -34,3 +34,32 @@ Storing a public access token in ansible as a var and used in the ansible CloudF
 Solution: Use AWS secrets manager to store the github personal access token.
 
 https://medium.com/@eoins/securing-github-tokens-in-a-serverless-codepipeline-dc3a24ddc356
+
+====
+
+Complex  codepipeline including codebuild exmample.
+
+https://github.com/aws-samples/codepipeline-nested-cfn/blob/master/codepipeline-cfn-codebuild.yml
+
+====
+
+For my first effort, I am going to add a stage to pipeline that will build out a lambda function from source.
+
+
+Project name – lambda-pipeline-build
+
+Operating system – Ubuntu
+
+Runtime – Standard
+
+Runtime version – aws/codebuild/standard:2.0
+
+Image version – Latest
+
+Buildspec name – buildspec.yml
+
+
+https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-available.html
+
+https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#runtime-versions-buildspec-file
+

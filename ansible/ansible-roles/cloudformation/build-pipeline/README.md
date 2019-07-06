@@ -50,6 +50,8 @@ To Do
 
 Add ability to purge s3 bucket using python. 
      - note, that this needs thought, as often I can just do a change set. I need to get ansible changeset working.
+Create an ansible role that can be used to encrypt the github token, and slack-hook URl locally for use in CF, this way the repo can remain public.
+     - https://github.com/GovTechSG/kms-aes
 
 License
 -------
