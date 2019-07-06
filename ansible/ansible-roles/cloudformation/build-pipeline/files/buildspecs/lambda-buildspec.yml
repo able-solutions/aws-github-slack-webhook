@@ -9,7 +9,7 @@ phases:
     commands:
       - echo Running post_build commands
       - mkdir build-output
-      - cp -R src/slack.js.js build-output
+      - cp -R src/slack.js build-output
       - mkdir -p build-output/node_modules
       - cp -R src/node_modules/* build-output/node_modules
       - cd build-output/
