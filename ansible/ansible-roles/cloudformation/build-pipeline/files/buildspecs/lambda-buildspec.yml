@@ -4,7 +4,7 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - npm install --prefix /src
+      - npm install --prefix src
   post_build:
     commands:
       - echo Running post_build commands
